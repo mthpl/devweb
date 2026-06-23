@@ -1,12 +1,12 @@
-/* Zmienne globalne i reset */
+/* Konfiguracja zmiennych i reset */
 :root {
-    --bg-dark: #03030c;
-    --card-bg: rgba(255, 255, 255, 0.03);
-    --card-border: rgba(255, 255, 255, 0.08);
+    --bg-dark: #020208;
+    --card-bg: rgba(6, 6, 20, 0.4);
+    --card-border: rgba(255, 255, 255, 0.06);
     --primary: #00fff2;
-    --secondary: #7f52ff;
+    --secondary: #8b5cf6;
     --text-main: #f3f4f6;
-    --text-muted: #9ca3af;
+    --text-muted: #8e9bb0;
     --font-tech: 'Orbitron', sans-serif;
     --font-body: 'Inter', sans-serif;
 }
@@ -26,8 +26,8 @@ body {
     min-height: 100vh;
 }
 
-/* Dynamiczne tło 3D */
-.space-bg {
+/* INTERAKTYWNE TŁO PRZESTRZENNE 3D */
+.space-3d-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -35,47 +35,59 @@ body {
     height: 100vh;
     z-index: -1;
     overflow: hidden;
-    background: radial-gradient(circle at 50% 50%, #0a0a26 0%, #03030c 100%);
+    background: #020206;
+    perspective: 1200px;
 }
 
-.grid-overlay {
+.digital-grid {
     position: absolute;
-    width: 200%;
-    height: 200%;
-    top: -50%;
-    left: -50%;
+    width: 300%;
+    height: 300%;
+    top: -100%;
+    left: -100%;
     background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-    transform: perspective(500px) rotateX(60deg);
-    transform-origin: center top;
+        linear-gradient(rgba(0, 255, 242, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 242, 0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: rotateX(65deg) translateZ(-100px);
+    transform-origin: center center;
+    pointer-events: none;
 }
 
-.orb {
+.nebula-glow {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.4;
+    filter: blur(150px);
+    opacity: 0.25;
+    pointer-events: none;
 }
 
-.orb-1 {
-    width: 400px;
-    height: 400px;
+.cyan-glow {
+    width: 600px;
+    height: 600px;
     background: var(--primary);
-    top: -10%;
-    right: 10%;
+    top: -20%;
+    right: -10%;
 }
 
-.orb-2 {
-    width: 500px;
-    height: 500px;
+.violet-glow {
+    width: 800px;
+    height: 800px;
     background: var(--secondary);
-    bottom: -10%;
-    left: -10%;
+    bottom: -30%;
+    left: -20%;
 }
 
-/* Efekty tekstowe */
+/* Cząsteczki / Gwiazdy 3D */
+.particle {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 10px #fff;
+}
+
+/* Typografia i Gradienty */
 .gradient-text {
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
@@ -83,25 +95,26 @@ body {
 }
 
 .text-glow {
-    text-shadow: 0 0 30px rgba(0, 255, 242, 0.3);
+    text-shadow: 0 0 40px rgba(0, 255, 242, 0.4);
 }
 
-/* Nawigacja */
+/* Pasek Nawigacji (Glassmorphism) */
 .navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 100;
-    background: rgba(3, 3, 12, 0.7);
-    backdrop-filter: blur(12px);
+    background: rgba(2, 2, 8, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--card-border);
 }
 
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1.2rem 2rem;
+    padding: 1.5rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -109,17 +122,18 @@ body {
 
 .logo {
     font-family: var(--font-tech);
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 800;
     text-decoration: none;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .nav-links a {
     color: var(--text-main);
     text-decoration: none;
-    margin-left: 2rem;
+    margin-left: 2.5rem;
     font-size: 0.95rem;
+    font-weight: 600;
     transition: color 0.3s;
 }
 
@@ -128,10 +142,18 @@ body {
 }
 
 .nav-links .nav-btn {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.5rem 1.2rem;
-    border-radius: 8px;
     border: 1px solid var(--primary);
+    padding: 0.6rem 1.4rem;
+    border-radius: 50px;
+    background: rgba(0, 255, 242, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
+    transition: all 0.3s ease;
+}
+
+.nav-links .nav-btn:hover {
+    background: var(--primary);
+    color: #000;
+    box-shadow: 0 0 25px rgba(0, 255, 242, 0.4);
 }
 
 /* Hero Section */
@@ -139,7 +161,7 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 120px 2rem 60px 2rem;
+    padding: 140px 2rem 60px 2rem;
 }
 
 .hero-container {
@@ -149,156 +171,171 @@ body {
 }
 
 .hero-content {
-    max-width: 750px;
+    max-width: 800px;
 }
 
 .badge-tech {
     display: inline-block;
-    background: rgba(0, 255, 242, 0.1);
-    border: 1px solid var(--primary);
-    padding: 0.4rem 1rem;
+    background: rgba(0, 255, 242, 0.08);
+    border: 1px solid rgba(0, 255, 242, 0.3);
+    padding: 0.5rem 1.2rem;
     border-radius: 50px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .badge-tech span {
     font-family: var(--font-tech);
-    font-size: 0.8rem;
-    letter-spacing: 2px;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
     color: var(--primary);
 }
 
 .hero-title {
     font-family: var(--font-tech);
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-size: clamp(2.5rem, 6.5vw, 4.8rem);
     font-weight: 800;
     line-height: 1.1;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .hero-subtitle {
     color: var(--text-muted);
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    font-weight: 300;
 }
 
-/* Przyciski */
 .hero-cta {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
 }
 
+/* Przyciski */
 .btn {
-    padding: 1rem 2rem;
-    border-radius: 12px;
+    padding: 1.1rem 2.5rem;
+    border-radius: 14px;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     font-size: 1rem;
 }
 
 .btn-primary {
     background: linear-gradient(45deg, var(--primary), var(--secondary));
-    color: #000;
-    box-shadow: 0 0 25px rgba(0, 255, 242, 0.3);
+    color: #020208;
+    box-shadow: 0 0 30px rgba(0, 255, 242, 0.25);
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 35px rgba(0, 255, 242, 0.5);
+    transform: translateY(-4px);
+    box-shadow: 0 0 45px rgba(0, 255, 242, 0.5);
 }
 
 .btn-secondary {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.02);
     color: #fff;
     border: 1px solid var(--card-border);
+    backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.05);
     border-color: var(--primary);
+    transform: translateY(-4px);
 }
 
-/* Sekcja Usług */
+/* Sekcja Usług (Głębokie Karty 3D Parallax) */
 .services-section {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 100px 2rem;
+    padding: 120px 2rem;
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 6rem;
 }
 
 .section-header h2 {
     font-family: var(--font-tech);
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1.5rem;
 }
 
 .section-header p {
     color: var(--text-muted);
+    font-size: 1.1rem;
 }
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-    perspective: 1000px; /* Perspektywa dla kart 3D */
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 3rem;
 }
 
-/* Zaawansowana Karta 3D */
+/* Zaawansowana Architektura Karty 3D */
 .card-3d {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 24px;
-    padding: 3rem 2rem;
-    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    padding: 4rem 2.5rem;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     transform-style: preserve-3d;
-    transition: border-color 0.5s ease, box-shadow 0.5s ease;
+    perspective: 1000px;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
     cursor: pointer;
 }
 
 .card-3d:hover {
-    border-color: var(--primary);
-    box-shadow: 0 20px 40px rgba(0, 255, 242, 0.1);
+    border-color: rgba(0, 255, 242, 0.3);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 242, 0.05);
 }
 
 .card-inner {
-    transform: translateZ(50px); /* Wypchnięcie zawartości w przestrzeń 3D */
+    transform-style: preserve-3d;
+    pointer-events: none;
+}
+
+/* Warstwy efektu paralaksy wewnątrz karty */
+.card-layer {
+    transition: transform 0.1s ease-out;
+    transform-style: preserve-3d;
 }
 
 .card-icon {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
 }
 
 .card-3d h3 {
     font-family: var(--font-tech);
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+    color: #fff;
 }
 
 .card-3d p {
     color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 2rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
 }
 
 .card-tech-stack {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
 }
 
 .card-tech-stack span {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.3rem 0.8rem;
-    border-radius: 8px;
+    background: rgba(0, 255, 242, 0.04);
+    padding: 0.4rem 1rem;
+    border-radius: 10px;
     font-size: 0.8rem;
+    font-family: var(--font-tech);
     color: var(--primary);
     border: 1px solid rgba(0, 255, 242, 0.1);
 }
@@ -307,62 +344,66 @@ body {
 .contact-section {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 2rem 120px 2rem;
+    padding: 60px 2rem 140px 2rem;
 }
 
 .contact-card {
-    background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%);
+    background: linear-gradient(135deg, rgba(6,6,20,0.5) 0%, rgba(15,10,35,0.3) 100%);
     border: 1px solid var(--card-border);
-    border-radius: 32px;
-    padding: 4rem 2rem;
-    max-width: 600px;
+    border-radius: 36px;
+    padding: 5rem 3rem;
+    max-width: 650px;
     margin: 0 auto;
     text-align: center;
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
 }
 
 .contact-card h2 {
     font-family: var(--font-tech);
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
 }
 
 .contact-card p {
     color: var(--text-muted);
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
+    font-weight: 300;
 }
 
 .contact-form {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1.5rem;
 }
 
 .form-group input, .form-group textarea {
     width: 100%;
-    padding: 1rem 1.5rem;
-    background: rgba(0, 0, 0, 0.3);
+    padding: 1.2rem 1.6rem;
+    background: rgba(2, 2, 6, 0.6);
     border: 1px solid var(--card-border);
-    border-radius: 12px;
+    border-radius: 14px;
     color: #fff;
     font-family: var(--font-body);
     font-size: 1rem;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
 .form-group input:focus, .form-group textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 15px rgba(0, 255, 242, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 242, 0.15);
+    background: rgba(2, 2, 6, 0.8);
 }
 
-/* RWD (Responsywność dla urządzeń mobilnych) */
-@media (max-width: 768px) {
+/* RWD - Responsywność */
+@media (max-width: 968px) {
     .nav-links {
-        display: none; /* Uproszczenie nawigacji na mobile */
+        display: none;
     }
     .hero {
-        padding-top: 100px;
+        padding-top: 120px;
         text-align: center;
     }
     .hero-cta {
@@ -370,5 +411,8 @@ body {
     }
     .services-grid {
         grid-template-columns: 1fr;
+    }
+    .card-3d {
+        padding: 3rem 2rem;
     }
 }
