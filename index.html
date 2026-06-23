@@ -3,24 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCore — Nowoczesne Strony WWW & Aplikacje Android</title>
+    <title>DevCore — Real-Time 3D Web & Android</title>
     <link rel="stylesheet" href="style.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet">
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
-    <div class="space-3d-container">
-        <div class="digital-grid"></div>
-        <div class="nebula-glow violet-glow"></div>
-        <div class="nebula-glow cyan-glow"></div>
-        <div id="particles-container"></div>
-    </div>
+    <canvas id="webgl-canvas"></canvas>
+
+    <div class="cyber-grid"></div>
 
     <nav class="navbar">
         <div class="nav-container">
@@ -35,12 +33,12 @@
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="badge-tech"><span>CYBERSPACE ARCHITECTURE</span></div>
-                <h1 class="hero-title">Tworzę Przyszłość <br><span class="gradient-text text-glow">Web & Android</span></h1>
-                <p class="hero-subtitle">Projektuję imersyjne środowiska internetowe oraz wysokowydajne aplikacje mobilne. Przekształcam surowy kod w interaktywne doświadczenia 3D, które hipnotyzują użytkowników.</p>
+                <div class="badge-tech"><span>WEBGL ENGINE ACTIVE</span></div>
+                <h1 class="hero-title">Aplikacje i Strony <br><span class="gradient-text text-glow">Wymiaru 3D</span></h1>
+                <p class="hero-subtitle">Nie projektuję nudnych szablonów. Tworzę interaktywne, trójwymiarowe ekosystemy cyfrowe dla biznesu, stron WWW i systemów Android. Dotknij przestrzeni kursorem.</p>
                 <div class="hero-cta">
                     <a href="#kontakt" class="btn btn-primary">Uruchom Projekt</a>
-                    <a href="#uslugi" class="btn btn-secondary">Eksploruj Usługi</a>
+                    <a href="#uslugi" class="btn btn-secondary">Zobacz Technologie</a>
                 </div>
             </div>
         </div>
@@ -48,59 +46,26 @@
 
     <section id="uslugi" class="services-section">
         <div class="section-header">
-            <h2>Eksperymentalny Ekosystem</h2>
-            <p>Przesuwam granice tego, co możliwe w przeglądarce i na smartfonie.</p>
+            <h2>Cyfrowa Architektura</h2>
+            <p>Poruszaj myszką nad kartami, aby zobaczyć fizykę głębi.</p>
         </div>
         
         <div class="services-grid">
             <div class="card-3d">
                 <div class="card-inner">
-                    <div class="card-layer" data-depth="0.1">
-                        <div class="card-icon">🌐</div>
-                    </div>
-                    <div class="card-layer" data-depth="0.2">
-                        <h3>Strony WWW Nowej Ery</h3>
-                    </div>
-                    <div class="card-layer" data-depth="0.3">
-                        <p>Wizytówki i aplikacje webowe z trójwymiarową głębią, zaawansowaną interakcją i animacjami o płynności 60 FPS.</p>
-                    </div>
-                    <div class="card-layer card-tech-stack" data-depth="0.4">
-                        <span>WebGL</span><span>GSAP 3D</span><span>Premium UI</span>
-                    </div>
+                    <div class="card-layer" data-depth="0.15"><div class="card-icon">🌐</div></div>
+                    <div class="card-layer" data-depth="0.25"><h3>Strony WWW Ultra-3D</h3></div>
+                    <div class="card-layer" data-depth="0.35"><p>Doświadczenia WebGL i Three.js, które redefiniują pojęcie nowoczesnej witryny firmowej.</p></div>
+                    <div class="card-layer card-tech-stack" data-depth="0.45"><span>Three.js</span><span>GSAP</span><span>Shaders</span></div>
                 </div>
             </div>
 
             <div class="card-3d">
                 <div class="card-inner">
-                    <div class="card-layer" data-depth="0.1">
-                        <div class="card-icon">🤖</div>
-                    </div>
-                    <div class="card-layer" data-depth="0.2">
-                        <h3>Aplikacje Android</h3>
-                    </div>
-                    <div class="card-layer" data-depth="0.3">
-                        <p>Natywne, lekkie i bezpieczne aplikacje mobilne skrojone pod system Android. Projektowane z myślą o intuicyjnym UX.</p>
-                    </div>
-                    <div class="card-layer card-tech-stack" data-depth="0.4">
-                        <span>Kotlin</span><span>Material 3</span><span>Firebase</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-3d">
-                <div class="card-inner">
-                    <div class="card-layer" data-depth="0.1">
-                        <div class="card-icon">⚡</div>
-                    </div>
-                    <div class="card-layer" data-depth="0.2">
-                        <h3>Optymalizacja UI/UX</h3>
-                    </div>
-                    <div class="card-layer" data-depth="0.3">
-                        <p>Przebudowa projektów do standardów nowoczesnego webu. Maksymalne przyspieszenie ładowania i wdrożenie unikalnego stylu.</p>
-                    </div>
-                    <div class="card-layer card-tech-stack" data-depth="0.4">
-                        <span>Performance</span><span>Next-Gen UX</span><span>SEO Max</span>
-                    </div>
+                    <div class="card-layer" data-depth="0.15"><div class="card-icon">🤖</div></div>
+                    <div class="card-layer" data-depth="0.25"><h3>Android Premium</h3></div>
+                    <div class="card-layer" data-depth="0.35"><p>Natywne aplikacje z zaawansowanymi, płynnymi animacjami UI i nowoczesną architekturą.</p></div>
+                    <div class="card-layer card-tech-stack" data-depth="0.45"><span>Kotlin</span><span>Jetpack Compose</span></div>
                 </div>
             </div>
         </div>
@@ -108,18 +73,12 @@
 
     <section id="kontakt" class="contact-section">
         <div class="contact-card">
-            <h2>Wejdź w interakcję</h2>
-            <p>Zbudujmy cyfrowy produkt, który zmiażdży konkurencję wizualnie i technologicznie.</p>
+            <h2>Stwórzmy coś <span class="gradient-text">Epickiego</span></h2>
+            <p>Zostaw wiadomość. Odpowiadam w czasie rzeczywistym.</p>
             <form class="contact-form" onsubmit="event.preventDefault();">
-                <div class="form-group">
-                    <input type="text" placeholder="Twoje Imię / Firma" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Twój E-mail" required>
-                </div>
-                <div class="form-group">
-                    <textarea placeholder="Opisz wizję swojego projektu..." rows="4" required></textarea>
-                </div>
+                <div class="form-group"><input type="text" placeholder="Twoje Imię" required></div>
+                <div class="form-group"><input type="email" placeholder="Twój E-mail" required></div>
+                <div class="form-group"><textarea placeholder="Co budujemy?" rows="4" required></textarea></div>
                 <button type="submit" class="btn btn-primary">Wyślij sygnał</button>
             </form>
         </div>
