@@ -1,12 +1,11 @@
-/* Konfiguracja zmiennych i reset */
 :root {
-    --bg-dark: #020208;
-    --card-bg: rgba(6, 6, 20, 0.4);
-    --card-border: rgba(255, 255, 255, 0.06);
+    --bg-dark: #020205;
+    --card-bg: rgba(5, 5, 15, 0.45);
+    --card-border: rgba(255, 255, 255, 0.07);
     --primary: #00fff2;
-    --secondary: #8b5cf6;
+    --secondary: #9333ea;
     --text-main: #f3f4f6;
-    --text-muted: #8e9bb0;
+    --text-muted: #94a3b8;
     --font-tech: 'Orbitron', sans-serif;
     --font-body: 'Inter', sans-serif;
 }
@@ -26,68 +25,33 @@ body {
     min-height: 100vh;
 }
 
-/* INTERAKTYWNE TŁO PRZESTRZENNE 3D */
-.space-3d-container {
+/* OKNO WEBGL (CAŁE TŁO) */
+#webgl-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* Cybernetyczna siatka nakładana na spód */
+.cyber-grid {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     z-index: -1;
-    overflow: hidden;
-    background: #020206;
-    perspective: 1200px;
-}
-
-.digital-grid {
-    position: absolute;
-    width: 300%;
-    height: 300%;
-    top: -100%;
-    left: -100%;
-    background-image: 
-        linear-gradient(rgba(0, 255, 242, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 242, 0.015) 1px, transparent 1px);
-    background-size: 60px 60px;
-    transform: rotateX(65deg) translateZ(-100px);
-    transform-origin: center center;
+    background-image: linear-gradient(rgba(0, 255, 242, 0.01) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0, 255, 242, 0.01) 1px, transparent 1px);
+    background-size: 80px 80px;
     pointer-events: none;
+    opacity: 0.7;
 }
 
-.nebula-glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(150px);
-    opacity: 0.25;
-    pointer-events: none;
-}
-
-.cyan-glow {
-    width: 600px;
-    height: 600px;
-    background: var(--primary);
-    top: -20%;
-    right: -10%;
-}
-
-.violet-glow {
-    width: 800px;
-    height: 800px;
-    background: var(--secondary);
-    bottom: -30%;
-    left: -20%;
-}
-
-/* Cząsteczki / Gwiazdy 3D */
-.particle {
-    position: absolute;
-    background: #fff;
-    border-radius: 50%;
-    pointer-events: none;
-    box-shadow: 0 0 10px #fff;
-}
-
-/* Typografia i Gradienty */
+/* Typografia i Styl */
 .gradient-text {
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
@@ -95,17 +59,16 @@ body {
 }
 
 .text-glow {
-    text-shadow: 0 0 40px rgba(0, 255, 242, 0.4);
+    text-shadow: 0 0 40px rgba(0, 255, 242, 0.5);
 }
 
-/* Pasek Nawigacji (Glassmorphism) */
+/* Nawigacja */
 .navbar {
     position: fixed;
     top: 0;
-    left: 0;
     width: 100%;
     z-index: 100;
-    background: rgba(2, 2, 8, 0.6);
+    background: rgba(2, 2, 5, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--card-border);
@@ -123,7 +86,7 @@ body {
 .logo {
     font-family: var(--font-tech);
     font-size: 1.4rem;
-    font-weight: 800;
+    font-weight: 900;
     text-decoration: none;
     letter-spacing: 2px;
 }
@@ -134,29 +97,17 @@ body {
     margin-left: 2.5rem;
     font-size: 0.95rem;
     font-weight: 600;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: var(--primary);
 }
 
 .nav-links .nav-btn {
     border: 1px solid var(--primary);
     padding: 0.6rem 1.4rem;
     border-radius: 50px;
-    background: rgba(0, 255, 242, 0.05);
+    background: rgba(0, 255, 242, 0.03);
     box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
-    transition: all 0.3s ease;
 }
 
-.nav-links .nav-btn:hover {
-    background: var(--primary);
-    color: #000;
-    box-shadow: 0 0 25px rgba(0, 255, 242, 0.4);
-}
-
-/* Hero Section */
+/* Hero */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -176,7 +127,7 @@ body {
 
 .badge-tech {
     display: inline-block;
-    background: rgba(0, 255, 242, 0.08);
+    background: rgba(0, 255, 242, 0.07);
     border: 1px solid rgba(0, 255, 242, 0.3);
     padding: 0.5rem 1.2rem;
     border-radius: 50px;
@@ -193,7 +144,7 @@ body {
 .hero-title {
     font-family: var(--font-tech);
     font-size: clamp(2.5rem, 6.5vw, 4.8rem);
-    font-weight: 800;
+    font-weight: 900;
     line-height: 1.1;
     margin-bottom: 2rem;
 }
@@ -203,7 +154,6 @@ body {
     font-size: clamp(1rem, 2vw, 1.25rem);
     line-height: 1.7;
     margin-bottom: 3rem;
-    font-weight: 300;
 }
 
 .hero-cta {
@@ -212,25 +162,23 @@ body {
     flex-wrap: wrap;
 }
 
-/* Przyciski */
 .btn {
     padding: 1.1rem 2.5rem;
     border-radius: 14px;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
 .btn-primary {
     background: linear-gradient(45deg, var(--primary), var(--secondary));
-    color: #020208;
-    box-shadow: 0 0 30px rgba(0, 255, 242, 0.25);
+    color: #000;
+    box-shadow: 0 0 30px rgba(0, 255, 242, 0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-4px);
-    box-shadow: 0 0 45px rgba(0, 255, 242, 0.5);
+    box-shadow: 0 0 45px rgba(0, 255, 242, 0.6);
 }
 
 .btn-secondary {
@@ -241,12 +189,11 @@ body {
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.05);
     border-color: var(--primary);
     transform: translateY(-4px);
 }
 
-/* Sekcja Usług (Głębokie Karty 3D Parallax) */
+/* Sekcja Usług */
 .services-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -264,18 +211,13 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.section-header p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
-}
-
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 3rem;
 }
 
-/* Zaawansowana Architektura Karty 3D */
+/* Zaawansowana Karta Parallax 3D */
 .card-3d {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
@@ -285,13 +227,13 @@ body {
     -webkit-backdrop-filter: blur(15px);
     transform-style: preserve-3d;
     perspective: 1000px;
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    transition: border-color 0.4s, box-shadow 0.4s;
     cursor: pointer;
 }
 
 .card-3d:hover {
-    border-color: rgba(0, 255, 242, 0.3);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 242, 0.05);
+    border-color: rgba(0, 255, 242, 0.4);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(0, 255, 242, 0.1);
 }
 
 .card-inner {
@@ -299,7 +241,6 @@ body {
     pointer-events: none;
 }
 
-/* Warstwy efektu paralaksy wewnątrz karty */
 .card-layer {
     transition: transform 0.1s ease-out;
     transform-style: preserve-3d;
@@ -314,20 +255,12 @@ body {
     font-family: var(--font-tech);
     font-size: 1.6rem;
     margin-bottom: 1.2rem;
-    color: #fff;
 }
 
 .card-3d p {
     color: var(--text-muted);
     line-height: 1.7;
     margin-bottom: 2.5rem;
-    font-weight: 300;
-}
-
-.card-tech-stack {
-    display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
 }
 
 .card-tech-stack span {
@@ -337,10 +270,11 @@ body {
     font-size: 0.8rem;
     font-family: var(--font-tech);
     color: var(--primary);
-    border: 1px solid rgba(0, 255, 242, 0.1);
+    border: 1px solid rgba(0, 255, 242, 0.15);
+    margin-right: 0.5rem;
 }
 
-/* Sekcja Kontaktowa */
+/* Kontakt */
 .contact-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -348,7 +282,7 @@ body {
 }
 
 .contact-card {
-    background: linear-gradient(135deg, rgba(6,6,20,0.5) 0%, rgba(15,10,35,0.3) 100%);
+    background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 36px;
     padding: 5rem 3rem;
@@ -356,63 +290,34 @@ body {
     margin: 0 auto;
     text-align: center;
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-}
-
-.contact-card h2 {
-    font-family: var(--font-tech);
-    font-size: 2.2rem;
-    margin-bottom: 1.2rem;
-}
-
-.contact-card p {
-    color: var(--text-muted);
-    margin-bottom: 3rem;
-    font-weight: 300;
 }
 
 .contact-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    margin-top: 2.5rem;
 }
 
 .form-group input, .form-group textarea {
     width: 100%;
     padding: 1.2rem 1.6rem;
-    background: rgba(2, 2, 6, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--card-border);
     border-radius: 14px;
     color: #fff;
-    font-family: var(--font-body);
     font-size: 1rem;
-    transition: all 0.3s ease;
 }
 
 .form-group input:focus, .form-group textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 20px rgba(0, 255, 242, 0.15);
-    background: rgba(2, 2, 6, 0.8);
+    box-shadow: 0 0 20px rgba(0, 255, 242, 0.2);
 }
 
-/* RWD - Responsywność */
 @media (max-width: 968px) {
-    .nav-links {
-        display: none;
-    }
-    .hero {
-        padding-top: 120px;
-        text-align: center;
-    }
-    .hero-cta {
-        justify-content: center;
-    }
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-    .card-3d {
-        padding: 3rem 2rem;
-    }
+    .nav-links { display: none; }
+    .hero { text-align: center; }
+    .hero-cta { justify-content: center; }
+    .services-grid { grid-template-columns: 1fr; }
 }
