@@ -1,0 +1,144 @@
+/* Reset i style bazowe */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #0a0a16;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    perspective: 1000px; /* Kluczowe dla efektu 3D */
+}
+
+/* Dynamiczne tło */
+.bg-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.05) 50%, transparent 100%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Kontener dla karty */
+.container {
+    z-index: 1;
+}
+
+/* Karta 3D */
+.card-3d {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 3rem;
+    border-radius: 24px;
+    width: 480px;
+    max-width: 90vw;
+    position: relative;
+    transform-style: preserve-3d;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: border-color 0.3s;
+}
+
+.card-3d:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+/* Zawartość karty - wypychamy elementy w osi Z */
+.card-content {
+    transform: translateZ(60px); /* Wyskakiwanie tekstu do przodu */
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #818cf8;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p {
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+/* Usługi / Odznaki */
+.services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    transform: translateZ(40px);
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+}
+
+/* Przycisk akcji */
+.btn-primary {
+    display: inline-block;
+    background: linear-gradient(45deg, #6366f1, #4f46e5);
+    color: white;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 14px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    transform: translateZ(50px);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 4px 25px rgba(99, 102, 241, 0.5);
+    transform: translateZ(55px) scale(1.02);
+}
+
+/* Błysk na karcie */
+.shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.15) 0%, transparent 60%);
+    pointer-events: none;
+    border-radius: 24px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
