@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCore — Personalizowane Strony WWW & Android</title>
+    <title>DevCore — Nowoczesne Strony WWW & Aplikacje Android</title>
     <link rel="stylesheet" href="style.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
-    <div class="space-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="grid-overlay"></div>
+    <div class="space-3d-container">
+        <div class="digital-grid"></div>
+        <div class="nebula-glow violet-glow"></div>
+        <div class="nebula-glow cyan-glow"></div>
+        <div id="particles-container"></div>
     </div>
 
     <nav class="navbar">
@@ -24,7 +27,6 @@
             <a href="#" class="logo">⚡ DEV<span class="gradient-text">CORE</span></a>
             <div class="nav-links">
                 <a href="#uslugi">Usługi</a>
-                <a href="#o-mnie">O mnie</a>
                 <a href="#kontakt" class="nav-btn">Start</a>
             </div>
         </div>
@@ -33,12 +35,12 @@
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="badge-tech"><span>NEXT-GEN INTERFACES</span></div>
+                <div class="badge-tech"><span>CYBERSPACE ARCHITECTURE</span></div>
                 <h1 class="hero-title">Tworzę Przyszłość <br><span class="gradient-text text-glow">Web & Android</span></h1>
-                <p class="hero-subtitle">Personalizowane strony www oparte o najnowsze standardy UX/UI oraz wysokowydajne aplikacje mobilne. Emanujące technologią, zoptymalizowane pod kątem konwersji.</p>
+                <p class="hero-subtitle">Projektuję imersyjne środowiska internetowe oraz wysokowydajne aplikacje mobilne. Przekształcam surowy kod w interaktywne doświadczenia 3D, które hipnotyzują użytkowników.</p>
                 <div class="hero-cta">
-                    <a href="#kontakt" class="btn btn-primary">Rozpocznij projekt</a>
-                    <a href="#uslugi" class="btn btn-secondary">Zobacz możliwości</a>
+                    <a href="#kontakt" class="btn btn-primary">Uruchom Projekt</a>
+                    <a href="#uslugi" class="btn btn-secondary">Eksploruj Usługi</a>
                 </div>
             </div>
         </div>
@@ -46,40 +48,58 @@
 
     <section id="uslugi" class="services-section">
         <div class="section-header">
-            <h2 class="reveal-text">Ecosystem Usług</h2>
-            <p>Technologie dopasowane do Twojego biznesu</p>
+            <h2>Eksperymentalny Ekosystem</h2>
+            <p>Przesuwam granice tego, co możliwe w przeglądarce i na smartfonie.</p>
         </div>
         
         <div class="services-grid">
-            <div class="card-3d" data-tilt>
+            <div class="card-3d">
                 <div class="card-inner">
-                    <div class="card-icon">🌐</div>
-                    <h3>Strony WWW 3D</h3>
-                    <p>Zaawansowane, interaktywne strony wizytówkowe oraz aplikacje webowe z płynnymi przejściami i głębią przestrzeni.</p>
-                    <div class="card-tech-stack">
-                        <span>Three.js</span><span>GSAP</span><span>React Vibe</span>
+                    <div class="card-layer" data-depth="0.1">
+                        <div class="card-icon">🌐</div>
+                    </div>
+                    <div class="card-layer" data-depth="0.2">
+                        <h3>Strony WWW Nowej Ery</h3>
+                    </div>
+                    <div class="card-layer" data-depth="0.3">
+                        <p>Wizytówki i aplikacje webowe z trójwymiarową głębią, zaawansowaną interakcją i animacjami o płynności 60 FPS.</p>
+                    </div>
+                    <div class="card-layer card-tech-stack" data-depth="0.4">
+                        <span>WebGL</span><span>GSAP 3D</span><span>Premium UI</span>
                     </div>
                 </div>
             </div>
 
-            <div class="card-3d" data-tilt>
+            <div class="card-3d">
                 <div class="card-inner">
-                    <div class="card-icon">🤖</div>
-                    <h3>Aplikacje Android</h3>
-                    <p>Natywne i hybrydowe aplikacje mobilne. Lekkie, bezpieczne, skrojone idealnie pod system operacyjny Google.</p>
-                    <div class="card-tech-stack">
+                    <div class="card-layer" data-depth="0.1">
+                        <div class="card-icon">🤖</div>
+                    </div>
+                    <div class="card-layer" data-depth="0.2">
+                        <h3>Aplikacje Android</h3>
+                    </div>
+                    <div class="card-layer" data-depth="0.3">
+                        <p>Natywne, lekkie i bezpieczne aplikacje mobilne skrojone pod system Android. Projektowane z myślą o intuicyjnym UX.</p>
+                    </div>
+                    <div class="card-layer card-tech-stack" data-depth="0.4">
                         <span>Kotlin</span><span>Material 3</span><span>Firebase</span>
                     </div>
                 </div>
             </div>
 
-            <div class="card-3d" data-tilt>
+            <div class="card-3d">
                 <div class="card-inner">
-                    <div class="card-icon">⚡</div>
-                    <h3>Optymalizacja & UI</h3>
-                    <p>Przebudowa istniejących systemów. Maksymalne przyspieszenie ładowania stron i wdrożenie nowoczesnego designu.</p>
-                    <div class="card-tech-stack">
-                        <span>SEO</span><span>UX Research</span><span>Core Web Vitals</span>
+                    <div class="card-layer" data-depth="0.1">
+                        <div class="card-icon">⚡</div>
+                    </div>
+                    <div class="card-layer" data-depth="0.2">
+                        <h3>Optymalizacja UI/UX</h3>
+                    </div>
+                    <div class="card-layer" data-depth="0.3">
+                        <p>Przebudowa projektów do standardów nowoczesnego webu. Maksymalne przyspieszenie ładowania i wdrożenie unikalnego stylu.</p>
+                    </div>
+                    <div class="card-layer card-tech-stack" data-depth="0.4">
+                        <span>Performance</span><span>Next-Gen UX</span><span>SEO Max</span>
                     </div>
                 </div>
             </div>
@@ -88,19 +108,19 @@
 
     <section id="kontakt" class="contact-section">
         <div class="contact-card">
-            <h2>Stwórzmy coś <span class="gradient-text">epickiego</span></h2>
-            <p>Masz pomysł na projekt? Potrzebujesz niezrównanej jakości? Napisz do mnie.</p>
+            <h2>Wejdź w interakcję</h2>
+            <p>Zbudujmy cyfrowy produkt, który zmiażdży konkurencję wizualnie i technologicznie.</p>
             <form class="contact-form" onsubmit="event.preventDefault();">
                 <div class="form-group">
-                    <input type="text" placeholder="Twoje Imię" required>
+                    <input type="text" placeholder="Twoje Imię / Firma" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" placeholder="Adres E-mail" required>
+                    <input type="email" placeholder="Twój E-mail" required>
                 </div>
                 <div class="form-group">
-                    <textarea placeholder="Opisz krótko swój projekt..." rows="4" required></textarea>
+                    <textarea placeholder="Opisz wizję swojego projektu..." rows="4" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Wyślij zapytanie</button>
+                <button type="submit" class="btn btn-primary">Wyślij sygnał</button>
             </form>
         </div>
     </section>
