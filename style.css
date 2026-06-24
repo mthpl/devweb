@@ -234,7 +234,7 @@ span.char[class*="gradient"] {
     z-index: 2;
 }
 
-/* GSAP animates from opacity:0 — initial hidden state set here */
+/* opacity/clipPath initial state set by GSAP — not here */
 .contact-card {
     width: 100%;
     max-width: 650px;
@@ -247,11 +247,8 @@ span.char[class*="gradient"] {
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     position: relative;
-    overflow: hidden;
+    overflow: clip; /* clip-path reveal needs this; overflow:hidden can block it */
     transition: border-color 0.4s, box-shadow 0.4s;
-    opacity: 0;
-    transform: translateY(80px) scale(0.9);
-    transform-style: preserve-3d;
 }
 
 /* Orb canvas sits behind all card content */
