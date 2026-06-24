@@ -1,65 +1,150 @@
 gsap.registerPlugin(ScrollTrigger);
 
-const isMobile = window.innerWidth <= 768;
-
-// --- 1. ORYGINALNE TŁO THREE.JS ---
+// --- 1. SEKCJA ENGINE 3D: PRAWDZIWY TEXT PARTICLE DISINTEGRATION ---
 const canvas = document.querySelector('#webgl-canvas');
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 6;
 
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: !isMobile, alpha: true });
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-const particlesGeometry = new THREE.BufferGeometry();
-const count = isMobile ? 800 : 1800; 
-const positions = new Float32Array(count * 3);
+// Globalne zmienne cząsteczek
+const totalParticles = 2200; // Liczba atomów na ekranie
+const targetPositions = []; // Matryca celów dla kolejnych sekcji
 
-for(let i = 0; i < count * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * 12;
+// Inicjalizacja bazowych losowych pozycji cząsteczek w kosmosie
+const geometry = new THREE.BufferGeometry();
+const positions = new Float32Array(totalParticles * 3);
+
+for(let i = 0; i < totalParticles * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 15;
 }
-particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-const particlesMaterial = new THREE.PointsMaterial({
-    size: isMobile ? 0.05 : 0.04,
+const material = new THREE.PointsMaterial({
+    size: 0.05,
     color: 0x00fff2,
     transparent: true,
-    opacity: 0.8,
+    opacity: 0.9,
     blending: THREE.AdditiveBlending
 });
 
-const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
+const particleSystem = new THREE.Points(geometry, material);
 scene.add(particleSystem);
 
-let mouseX = 0, mouseY = 0;
-
-document.addEventListener('mousemove', (event) => {
-    mouseX = (event.clientX / window.innerWidth) - 0.5;
-    mouseY = (event.clientY / window.innerHeight) - 0.5;
-});
-
-document.addEventListener('touchmove', (event) => {
-    if(event.touches.length > 0) {
-        mouseX = (event.touches[0].clientX / window.innerWidth) - 0.5;
-        mouseY = (event.touches[0].clientY / window.innerHeight) - 0.5;
-    }
-}, { passive: true });
-
-const clock = new THREE.Clock();
-const tick = () => {
-    const elapsedTime = clock.getElapsedTime();
+// FUNKCJA PRZEKSZTAŁCAJĄCA TEKST HTML NA WSPÓŁRZĘDNE 3D (Zapis kształtu liter)
+function generateTextTargets(lines, index) {
+    const textCanvas = document.createElement('canvas');
+    const ctx = textCanvas.getContext('2d');
+    textCanvas.width = 1000;
+    textCanvas.height = 300;
     
-    particleSystem.rotation.y = elapsedTime * 0.03;
-    particleSystem.rotation.x += ( -mouseY * 0.3 - particleSystem.rotation.x ) * 0.05;
-    particleSystem.rotation.y += ( mouseX * 0.3 - particleSystem.rotation.y ) * 0.05;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '900 65px Orbitron, sans-serif';
+    ctx.textAlign = 'center';
+    
+    // Rysujemy linie tekstu na ukrytym canvasie 2D
+    lines.forEach((line, i) => {
+        ctx.fillText(line.toUpperCase(), textCanvas.width / 2, 100 + i * 80);
+    });
+    
+    const imgData = ctx.getImageData(0, 0, textCanvas.width, textCanvas.height);
+    const points = [];
+    
+    // Próbkowanie pikseli napisu
+    for (let y = 0; y < textCanvas.height; y += 3) {
+        for (let x = 0; x < textCanvas.width; x += 3) {
+            const alpha = imgData.data[(y * textCanvas.width + x) * 4 + 3];
+            if (alpha > 128) {
+                // Skalowanie pikseli 2D do przestrzeni 3D Three.js
+                const pX = (x - textCanvas.width / 2) * 0.015;
+                const pY = -(y - textCanvas.height / 2) * 0.015 + 1.2;
+                const pZ = (Math.random() - 0.5) * 0.2;
+                points.push({x: pX, y: pY, z: pZ});
+            }
+        }
+    }
+    
+    targetPositions[index] = points;
+}
+
+// Surowe teksty nagłówków, które mają ulegać eksplozji ( SEO i układ zachowany )
+const headers = [
+    ["Budowa stron WWW", "Dlaczego warto?"],
+    ["Budowa dedykowanych", "Aplikacji Android"],
+    ["Kim jestem?", "Programista z Pasji"]
+];
+
+headers.forEach((text, index) => generateTextTargets(text, index));
+
+// Sterowanie za pomocą myszki/dotyku
+let mouseX = 0, mouseY = 0;
+const mouseHandler = (x, y) => {
+    mouseX = (x / window.innerWidth) - 0.5;
+    mouseY = (y / window.innerHeight) - 0.5;
+};
+document.addEventListener('mousemove', (e) => mouseHandler(e.clientX, e.clientY));
+document.addEventListener('touchmove', (e) => mouseHandler(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+
+// Główna pętla renderowania i fizyki płynnego przyciągania atomów
+const posAttribute = particleSystem.geometry.attributes.position;
+let currentMorphProgress = 0; // Stan przejścia (0=Sekcja1, 1=Eksplozja, 2=Sekcja2 itd.)
+
+const tick = () => {
+    const baseSection = Math.floor(currentMorphProgress);
+    const nextSection = baseSection + 1;
+    const factor = currentMorphProgress - baseSection; // Postęp ułamkowy skrolla (0 do 1)
+
+    const baseTargets = targetPositions[baseSection] || [];
+    const nextTargets = targetPositions[nextSection] || [];
+
+    for (let i = 0; i < totalParticles; i++) {
+        let tX, tY, tZ;
+
+        // PRAWDZIWY EFEKT WYBUCHU: jeśli jesteśmy w trakcie skrolowania, cząsteczki rozlatują się agresywnie po tle
+        if (factor > 0.1 && factor < 0.9) {
+            // Generujemy chaos/rozproszenie w przestrzeni na bazie funkcji sinus
+            const seed = i * 0.5;
+            const explosionFactor = 1 + Math.sin(factor * Math.PI) * 1.5;
+            tX = Math.sin(seed) * 6 * explosionFactor;
+            tY = Math.cos(seed) * 6 * explosionFactor;
+            tZ = Math.sin(seed * 2) * 5 * explosionFactor;
+        } else {
+            // STABILIZACJA I SCALANIE: cząsteczki układają się idealnie w litery aktualnej sekcji
+            const targetSet = factor < 0.5 ? baseTargets : nextTargets;
+            if (targetSet && targetSet[i % targetSet.length]) {
+                tX = targetSet[i % targetSet.length].x;
+                tY = targetSet[i % targetSet.length].y;
+                tZ = targetSet[i % targetSet.length].z;
+            } else {
+                // Jeśli brakuje punktów, reszta krąży swobodnie w tle kosmosu
+                tX = Math.sin(i) * 5;
+                tY = Math.cos(i) * 5;
+                tZ = Math.sin(i * 2) * 3;
+            }
+        }
+
+        // Płynna interpolacja (LERP) pozycji dla zachowania płynności klatek
+        posAttribute.array[i * 3] += (tX - posAttribute.array[i * 3]) * 0.12;
+        posAttribute.array[i * 3 + 1] += (tY - posAttribute.array[i * 3 + 1]) * 0.12;
+        posAttribute.array[i * 3 + 2] += (tZ - posAttribute.array[i * 3 + 2]) * 0.12;
+    }
+
+    posAttribute.needsUpdate = true;
+
+    // Delikatna reakcja całej chmury na kursor/dotyk
+    particleSystem.rotation.y += (mouseX * 0.4 - particleSystem.rotation.y) * 0.05;
+    particleSystem.rotation.x += (-mouseY * 0.4 - particleSystem.rotation.x) * 0.05;
 
     renderer.render(scene, camera);
     window.requestAnimationFrame(tick);
 };
 tick();
 
+// Dopasowanie do zmian rozmiaru okna
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -67,116 +152,62 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. PARSER TEKSTU (SZANUJE TAGI <BR> I PROSTUJE STRUKTURĘ DLA OSTROŚCI) ---
-document.querySelectorAll('.fx-shatter').forEach(title => {
-    const fragment = document.createDocumentFragment();
+// --- 2. SEKCJA SCROLL TRIGGER: KONTROLA ROZPADU I UI ---
+const sections = document.querySelectorAll('.particle-section');
 
-    const extractChars = (node, inheritedClasses = '') => {
-        Array.from(node.childNodes).forEach(child => {
-            if (child.nodeType === Node.TEXT_NODE) {
-                child.textContent.split('').forEach(char => {
-                    if (char === ' ') {
-                        fragment.appendChild(document.createTextNode(' '));
-                    } else {
-                        const span = document.createElement('span');
-                        span.className = `char ${inheritedClasses}`.trim(); 
-                        span.textContent = char;
-                        fragment.appendChild(span);
-                    }
-                });
-            } else if (child.nodeType === Node.ELEMENT_NODE) {
-                if (child.tagName.toLowerCase() === 'br') {
-                    fragment.appendChild(document.createElement('br'));
-                } else {
-                    const currentClasses = child.className;
-                    extractChars(child, currentClasses);
-                }
-            }
-        });
-    };
+sections.forEach((section, index) => {
+    const ui = section.querySelector('.ui-target');
 
-    extractChars(title);
-    title.innerHTML = ''; 
-    title.appendChild(fragment); 
-});
-
-
-// --- 3. DWUKIERUNKOWA OŚ CZASU (ZUNIFIKOWANE WEJŚCIE I ROZPAD) ---
-const particleSections = document.querySelectorAll('.particle-section');
-
-particleSections.forEach((section, index) => {
-    const chars = section.querySelectorAll('.char');
-    const subtitle = section.querySelector('.hero-subtitle');
-    const cta = section.querySelector('.hero-cta');
-
-    // Ustawienie domyślnego, krystalicznie ostrego stanu początkowego liter
-    gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
-    if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
-    if(cta) gsap.set(cta, { opacity: 1, y: 0 });
-
-    const masterTimeline = gsap.timeline({
+    const tl = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '+=150%', // Wydłużony czas przewijania, aby zmieścić rozpad
+            end: '+=100%',
             scrub: 1,
             pin: true,
             anticipatePin: 1
         }
     });
 
-    // FAZA 1: WEJŚCIE (SCALANIE) — litery wlatują z kosmosu (dla sekcji 2 i 3)
-    if (index > 0) {
-        chars.forEach((char) => {
-            const inX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
-            const inY = isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7;
-            const inZ = isMobile ? 0 : (Math.random() - 0.5) * 500;
-            const inRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180;
-
-            masterTimeline.from(char, {
-                x: inX,
-                y: inY,
-                z: inZ,
-                rotationX: inRot,
-                rotationY: inRot,
-                scale: 0,
-                opacity: 0,
-                duration: 1
-            }, 0);
-        });
-
-        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 40, duration: 0.8 }, 0.2);
-        if(cta) masterTimeline.from(cta, { opacity: 0, y: 40, duration: 0.6 }, 0.4);
-    }
-
-    // FAZA 2: PUNKT KULMINACYJNY — stabilne okno czasowe, kiedy tekst stoi złączony na ekranie
-    masterTimeline.to({}, { duration: 0.5 });
-
-    // FAZA 3: WYJŚCIE (ROZPROSZENIE) — litery autentycznie eksplodują i rozlatują się w nicość
-    chars.forEach((char) => {
-        const outX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
-        const outY = isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7;
-        const outZ = isMobile ? 0 : (Math.random() - 0.5) * 500;
-        const outRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180;
-
-        masterTimeline.to(char, {
-            x: outX,
-            y: outY,
-            z: outZ,
-            rotationX: outRot,
-            rotationY: outRot,
-            scale: 0,
-            opacity: 0,
-            duration: 1
-        }, '+=0'); // Odpalenie sekwencji wybuchu od razu po oknie stabilizacji
+    // Płynna zmiana suwaka kontrolującego stan cząsteczek Three.js
+    tl.to(window, {
+        duration: 1,
+        onUpdate: function() {
+            currentMorphProgress = index + this.progress();
+        }
     });
 
-    if(subtitle) masterTimeline.to(subtitle, { opacity: 0, y: -40, duration: 0.8 }, '-=1');
-    if(cta) masterTimeline.to(cta, { opacity: 0, y: -20, duration: 0.6 }, '-=1');
+    // Wygaszanie interfejsu (UI) aktualnej sekcji, gdy cząsteczki wybuchają
+    if (index < sections.length - 1) {
+        gsap.to(ui, {
+            scrollTrigger: {
+                trigger: section,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            },
+            opacity: 0,
+            pointerEvents: 'none'
+        });
+    }
+
+    // Włączanie interfejsu nowej sekcji, gdy cząsteczki scalają się w wyraz
+    if (index > 0) {
+        gsap.to(ui, {
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 50%',
+                end: 'top top',
+                scrub: true
+            },
+            opacity: 1,
+            pointerEvents: 'auto'
+        });
+    }
 });
 
 
-// --- 4. INTERAKTYWNE WYDARZENIA FORMULARZA ---
+// --- 3. SEKCJA KONTAKT: INTERAKTYWNE EFEKTY ---
 const formCard = document.querySelector('.contact-card');
 const formInputs = document.querySelectorAll('.custom-input-group input, .custom-input-group textarea');
 
@@ -193,8 +224,7 @@ formInputs.forEach(input => {
     });
 });
 
-
-// --- 5. OBSŁUGA FORMULARZA KONTAKTOWEGO (AJAX) ---
+// Obsługa formularza AJAX
 const form = document.getElementById('contact-form-element');
 const result = document.getElementById('form-result');
 
