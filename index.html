@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevCore — Real-Time 3D Web & Android</title>
+    
+    <title>Tworzenie Stron WWW & Aplikacji Android | Freelancer</title>
+    <meta name="description" content="Personalizowane strony internetowe, landing page oraz proste aplikacje Android dla Twojego biznesu. Profesjonalne pozycjonowanie SEO, integracje i nowoczesny design.">
+    <meta name="keywords" content="tworzenie stron www, aplikacje android, freelancer, landing page, strony internetowe, pozycjonowanie seo, strony na zamówienie">
+    
     <link rel="stylesheet" href="style.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,69 +21,80 @@
 <body>
 
     <canvas id="webgl-canvas"></canvas>
-
     <div class="cyber-grid"></div>
 
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">⚡ DEV<span class="gradient-text">CORE</span></a>
             <div class="nav-links">
-                <a href="#uslugi">Usługi</a>
-                <a href="#kontakt" class="nav-btn">Start</a>
+                <a href="#strony">Strony WWW</a>
+                <a href="#aplikacje">Aplikacje Android</a>
+                <a href="#o-mnie">O mnie</a>
+                <a href="#kontakt" class="nav-btn">Darmowa Wycena</a>
             </div>
         </div>
     </nav>
 
-    <section class="hero">
+    <section id="strony" class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="badge-tech"><span>WEBGL ENGINE ACTIVE</span></div>
-                <h1 class="hero-title">Aplikacje i Strony <br><span class="gradient-text text-glow">Wymiaru 3D</span></h1>
-                <p class="hero-subtitle">Nie projektuję nudnych szablonów. Tworzę interaktywne, trójwymiarowe ekosystemy cyfrowe dla biznesu, stron WWW i systemów Android. Dotknij przestrzeni kursorem.</p>
+                <h1 class="hero-title">Budowa stron WWW<br><span class="gradient-text text-glow">Dlaczego warto?</span></h1>
+                <p class="hero-subtitle">
+                    W dzisiejszych czasach Twoja strona to najważniejszy sprzedawca. Dobrze wypozycjonowana witryna (SEO) sprawia, że klienci sami Cię znajdują w Google, co bezpośrednio przekłada się na realny zysk. 
+                    <br><br>
+                    Projektuję **personalizowane strony www idealnie dostosowane do specyfiki Twojego biznesu** – od prostych, eleganckich wizytówek i landing page'y, po rozbudowane serwisy. Potrzebujesz systemu rezerwacji online, integracji z kalendarzem lub zewnętrznymi narzędziami? Żaden problem. Wszystko połączę w jedną, spójną całość.
+                </p>
                 <div class="hero-cta">
-                    <a href="#kontakt" class="btn btn-primary">Uruchom Projekt</a>
-                    <a href="#uslugi" class="btn btn-secondary">Zobacz Technologie</a>
+                    <a href="#kontakt" class="btn btn-primary">Zbuduj stronę ze mną</a>
+                    <a href="#aplikacje" class="btn btn-secondary">Zobacz aplikacje</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="uslugi" class="services-section">
-        <div class="section-header">
-            <h2>Cyfrowa Architektura</h2>
-            <p>Poruszaj myszką nad kartami, aby zobaczyć fizykę głębi.</p>
-        </div>
-        
-        <div class="services-grid">
-            <div class="card-3d">
-                <div class="card-inner">
-                    <div class="card-layer" data-depth="0.15"><div class="card-icon">🌐</div></div>
-                    <div class="card-layer" data-depth="0.25"><h3>Strony WWW Ultra-3D</h3></div>
-                    <div class="card-layer" data-depth="0.35"><p>Doświadczenia WebGL i Three.js, które redefiniują pojęcie nowoczesnej witryny firmowej.</p></div>
-                    <div class="card-layer card-tech-stack" data-depth="0.45"><span>Three.js</span><span>GSAP</span><span>Shaders</span></div>
+    <div class="transition-container" id="text-trigger">
+        <h2 class="dissolve-text">Transformacja pomysłu w cyfrowy kod...</h2>
+    </div>
+
+    <section id="aplikacje" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h2 class="hero-title">Budowa dedykowanych<br><span class="gradient-text text-glow">Aplikacji Android</span></h2>
+                <p class="hero-subtitle">
+                    Szukasz sposobu na ułatwienie codziennej pracy w firmie lub chcesz wejść na nowy poziom marketingu? Tworzę **proste, niezwykle przydatne aplikacje mobilne**, które ułatwiają życie Twoim klientom i Tobie.
+                    <br><br>
+                    Mogą to być aplikacje narzędziowe działające na co dzień, systemy z inteligentnymi powiadomieniami PUSH przypominającymi o marce, programy lojalnościowe lub aplikacje wspierające procesy sprzedażowe. Ogranicza nas tylko wyobraźnia – zamienię Twój pomysł w gotową do pobrania aplikację na telefon.
+                </p>
+                <div class="hero-cta">
+                    <a href="#kontakt" class="btn btn-primary">Zaprojektuj aplikację</a>
+                    <a href="#o-mnie" class="btn btn-secondary">Poznaj mnie lepiej</a>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="card-3d">
-                <div class="card-inner">
-                    <div class="card-layer" data-depth="0.15"><div class="card-icon">🤖</div></div>
-                    <div class="card-layer" data-depth="0.25"><h3>Android Premium</h3></div>
-                    <div class="card-layer" data-depth="0.35"><p>Natywne aplikacje z zaawansowanymi, płynnymi animacjami UI i nowoczesną architekturą.</p></div>
-                    <div class="card-layer card-tech-stack" data-depth="0.45"><span>Kotlin</span><span>Jetpack Compose</span></div>
-                </div>
+    <section id="o-mnie" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h2 class="hero-title">Kim jestem?<br><span class="gradient-text text-glow">Programista z Pasji</span></h2>
+                <p class="hero-subtitle">
+                    Działam jako **freelancer**, a kodowanie stron oraz aplikacji mobilnych to moja wieloletnia, hobbistyczna pasja. Co to oznacza dla Ciebie? Brak korporacyjnego bełkotu, elastyczność oraz pełne zaangażowanie w Twój projekt.
+                    <br><br>
+                    Moim największym atutem jest umiejętność **dokładnego przeniesienia wizji klienta bezpośrednio na ekran komputera lub telefonu**. Nie musisz znać się na technologii – wysłucham Twoich potrzeb, przeanalizuję Twój biznes i rzetelnie doradzę najlepsze, najbardziej opłacalne rozwiązania techniczne. Twoje zadowolenie to mój priorytet.
+                </p>
             </div>
         </div>
     </section>
 
     <section id="kontakt" class="contact-section">
         <div class="contact-card">
-            <h2>Stwórzmy coś <span class="gradient-text">Epickiego</span></h2>
-            <p>Zostaw wiadomość. Odpowiadam w czasie rzeczywistym.</p>
+            <h2>Porozmawiajmy o projekcie</h2>
+            <p>Napisz, czego potrzebujesz. Doradztwo i wstępna wycena są całkowicie bezpłatne.</p>
             <form class="contact-form" onsubmit="event.preventDefault();">
                 <div class="form-group"><input type="text" placeholder="Twoje Imię" required></div>
                 <div class="form-group"><input type="email" placeholder="Twój E-mail" required></div>
-                <div class="form-group"><textarea placeholder="Co budujemy?" rows="4" required></textarea></div>
-                <button type="submit" class="btn btn-primary">Wyślij sygnał</button>
+                <div class="form-group"><textarea placeholder="Opisz swój biznes i to, co chcesz stworzyć..." rows="4" required></textarea></div>
+                <button type="submit" class="btn btn-primary">Wyślij darmowe zapytanie</button>
             </form>
         </div>
     </section>
