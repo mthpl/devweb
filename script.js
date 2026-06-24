@@ -1,6 +1,6 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// --- 1. STABILNE, ORYGINALNE TŁO KOSMICZNE THREE.JS ---
+// --- 1. ORYGINALNE, CZYSTE TŁO KOSMICZNE THREE.JS ---
 const canvas = document.querySelector('#webgl-canvas');
 const scene = new THREE.Scene();
 
@@ -12,7 +12,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const particlesGeometry = new THREE.BufferGeometry();
-const count = 1800; // Twoja oryginalna liczba gwiazd
+const count = 1800; 
 const positions = new Float32Array(count * 3);
 
 for(let i = 0; i < count * 3; i++) {
@@ -40,11 +40,9 @@ document.addEventListener('mousemove', (event) => {
 const clock = new THREE.Clock();
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
-    
-    // Tło kręci się stabilnie w stałym tempie, bez zniekształceń
     particleSystem.rotation.y = elapsedTime * 0.04;
-    particleSystem.rotation.x += ( -mouseY * 0.5 - particleSystem.rotation.x ) * 0.05;
-    particleSystem.rotation.y += ( mouseX * 0.5 - particleSystem.rotation.y ) * 0.05;
+    particleSystem.rotation.x += ( -mouseY * 0.4 - particleSystem.rotation.x ) * 0.05;
+    particleSystem.rotation.y += ( mouseX * 0.4 - particleSystem.rotation.y ) * 0.05;
 
     renderer.render(scene, camera);
     window.requestAnimationFrame(tick);
@@ -58,81 +56,96 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. PRAWDZIWY EFEKT ROZPADU I SCALANIA TEKSTU W CZĄSTECZKI (CANVAS DISINTEGRATION) ---
+// --- 2. NATYWNY EFEKT DEZINTEGRACJI TEKSTU NA CZĄSTECZKI (TEXT DISPERSION) ---
+document.querySelectorAll('.fx-shatter').forEach(title => {
+    // Rozbijamy nagłówek tekstowy na pojedyncze litery, zachowując strukturę DOM
+    const text = title.innerHTML;
+    title.innerHTML = '';
+    
+    // Parsowanie struktury z uwzględnieniem tagów html (np. gradient-text)
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = text;
+    
+    const processNodes = (node, output) => {
+        node.childNodes.forEach(child => {
+            if (child.nodeType === Node.TEXT_NODE) {
+                child.textContent.split('').forEach(char => {
+                    if(char === ' ') {
+                        output.innerHTML += ' ';
+                    } else {
+                        output.innerHTML += `<span class="char">${char}</span>`;
+                    }
+                });
+            } else if (child.nodeType === Node.ELEMENT_NODE) {
+                const newEl = child.cloneNode(false);
+                newEl.innerHTML = '';
+                processNodes(child, newEl);
+                output.appendChild(newEl);
+            }
+        });
+    };
+    
+    processNodes(tempDiv, title);
+});
+
+// Sterowanie eksplozją cząsteczek liter i opisów przy skrolowaniu
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section) => {
-    const target = section.querySelector('.morph-target');
+    const chars = section.querySelectorAll('.char');
+    const subtitle = section.querySelector('.hero-subtitle');
+    const cta = section.querySelector('.hero-cta');
 
-    // Tworzymy mechanizm rozbicia zawartości na piksele po załadowaniu html2canvas
-    window.addEventListener('load', () => {
-        html2canvas(target, { background: 'transparent', scale: 1, useCORS: true }).then(canvas => {
-            const ctx = canvas.getContext('2d');
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            
-            // Generujemy nakładkę rysującą cząsteczki
-            const pCanvas = document.createElement('canvas');
-            pCanvas.classList.add('disintegrate-canvas');
-            pCanvas.width = canvas.width;
-            pCanvas.height = canvas.height;
-            const pCtx = pCanvas.getContext('2d');
-            target.appendChild(pCanvas);
-
-            // Filtrujemy piksele tekstu, tworząc z nich strukturę fizycznych punktów
-            const localParticles = [];
-            for (let y = 0; y < canvas.height; y += 4) {
-                for (let x = 0; x < canvas.width; x += 4) {
-                    const i = (y * canvas.width + x) * 4;
-                    if (imgData.data[i + 3] > 128) { // Pobierz tylko widoczne elementy tekstu/guzików
-                        localParticles.push({
-                            x: x, y: y,
-                            r: imgData.data[i], g: imgData.data[i+1], b: imgData.data[i+2], a: imgData.data[i+3],
-                            vx: (Math.random() - 0.5) * 8, // Prędkość eksplozji w bok
-                            vy: (Math.random() - 2) * 6,   // Prędkość wznoszenia się w górę
-                        });
-                    }
-                }
-            }
-
-            // Sterownik animacji podpięty pod ScrollTrigger
-            const obj = { progress: 0 };
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: section,
-                    start: 'top top',
-                    end: '+=100%',
-                    scrub: true,
-                    pin: true,
-                    onUpdate: (self) => {
-                        // Kiedy skrolujemy, płynnie ukrywamy standardowy tekst i odpalamy cząsteczki
-                        if (self.progress > 0.01 && self.progress < 0.99) {
-                            target.style.opacity = 0.01; // Zachowaj przestrzeń, ale ukryj tekst renderowany przez przeglądarkę
-                        } else if (self.progress >= 0.99) {
-                            target.style.opacity = 0;
-                        } else {
-                            target.style.opacity = 1;
-                        }
-                    }
-                }
-            }).to(obj, {
-                progress: 1,
-                ease: "none",
-                onUpdate: () => {
-                    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-                    
-                    // Rysujemy fizyczny rozpad tekstu klatka po klatce na bazie poziomu przewijania
-                    localParticles.forEach(p => {
-                        const currentX = p.x + p.vx * obj.progress * 30;
-                        const currentY = p.y + p.vy * obj.progress * 30 - (obj.progress * 150); // Efekt odlatywania w kosmos
-                        const currentAlpha = Math.max(0, (p.a / 255) * (1 - obj.progress));
-
-                        pCtx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${currentAlpha})`;
-                        pCtx.fillRect(currentX, currentY, 2.5, 2.5); // Cząsteczki rozbitego tekstu
-                    });
-                }
-            });
-        });
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: '+=100%',
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1
+        }
     });
+
+    // Animacja rozpadu nagłówka: litery eksplodują i rozlatują się w losowych kierunkach 3D kosmosu
+    chars.forEach((char) => {
+        const randomX = (Math.random() - 0.5) * window.innerWidth * 0.8;
+        const randomY = (Math.random() - 0.7) * window.innerHeight * 0.8;
+        const randomZ = (Math.random() - 0.5) * 500;
+        const randomRot = (Math.random() - 0.5) * 360;
+
+        tl.to(char, {
+            x: randomX,
+            y: randomY,
+            z: randomZ,
+            rotation: randomRot,
+            opacity: 0,
+            filter: 'blur(10px)',
+            duration: 1
+        }, 0);
+    });
+
+    // Podtytuł i przyciski rozsuwają się atomowo na boki i gasną w tym samym czasie
+    if(subtitle) {
+        tl.to(subtitle, {
+            letterSpacing: '10px',
+            filter: 'blur(15px)',
+            opacity: 0,
+            y: -50,
+            scale: 1.05,
+            duration: 0.8
+        }, 0);
+    }
+
+    if(cta) {
+        tl.to(cta, {
+            opacity: 0,
+            scale: 0.9,
+            filter: 'blur(10px)',
+            y: 30,
+            duration: 0.6
+        }, 0);
+    }
 });
 
 
