@@ -37,7 +37,7 @@
 
     <section id="strony" class="hero particle-section">
         <div class="hero-container">
-            <div class="glass-panel morph-target">
+            <div class="hero-content morph-target">
                 <h1 class="hero-title">Budowa stron WWW<br><span class="gradient-text text-glow">Dlaczego warto?</span></h1>
                 <p class="hero-subtitle">
                     W dzisiejszych czasach Twoja strona to najważniejszy sprzedawca. Dobrze wypozycjonowana witryna (SEO) sprawia, że klienci sami Cię znajdują w Google, co bezpośrednio przekłada się na realny zysk. 
@@ -54,7 +54,7 @@
 
     <section id="aplikacje" class="hero particle-section">
         <div class="hero-container">
-            <div class="glass-panel morph-target">
+            <div class="hero-content morph-target">
                 <h2 class="hero-title">Budowa dedykowanych<br><span class="gradient-text text-glow">Aplikacji Android</span></h2>
                 <p class="hero-subtitle">
                     Szukasz sposobu na ułatwienie codziennej pracy w firmie lub chcesz wejść na nowy poziom marketingu? Tworzę <b>proste, niezwykle przydatne aplikacje mobilne</b>, które ułatwiają życie Twoim klientom i Tobie.
@@ -71,7 +71,7 @@
 
     <section id="o-mnie" class="hero particle-section">
         <div class="hero-container">
-            <div class="glass-panel morph-target">
+            <div class="hero-content morph-target">
                 <h2 class="hero-title">Kim jestem?<br><span class="gradient-text text-glow">Programista z Pasji</span></h2>
                 <p class="hero-subtitle">
                     Działam jako <b>freelancer</b>, a kodowanie stron oraz aplikacji mobilnych to moja wieloletnia, hobbistyczna pasja. Co to oznacza dla Ciebie? Brak korporacyjnego bełkotu, elastyczność oraz pełne zaangażowanie w Twój projekt.
@@ -83,13 +83,19 @@
     </section>
 
     <section id="kontakt" class="contact-section">
-        <div class="contact-card glass-panel">
+        <div class="contact-card">
             <h2>Porozmawiajmy o projekcie</h2>
             <p>Napisz, czego potrzebujesz. Doradztwo i wstępna wycena są całkowicie bezpłatne.</p>
-            <form class="contact-form" onsubmit="event.preventDefault();">
-                <div class="form-group"><input type="text" placeholder="Twoje Imię" required></div>
-                <div class="form-group"><input type="email" placeholder="Twój E-mail" required></div>
-                <div class="form-group"><textarea placeholder="Opisz swój biznes i to, co chcesz stworzyć..." rows="4" required></textarea></div>
+            
+            <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contact-form-element">
+                <input type="hidden" name="access_key" value="8176e9ae-0eda-4450-a91d-996b0d07e5a8">
+                <input type="checkbox" name="botcheck" style="display: none;">
+
+                <div class="form-group"><input type="text" name="name" placeholder="Twoje Imię" required></div>
+                <div class="form-group"><input type="email" name="email" placeholder="Twój E-mail" required></div>
+                <div class="form-group"><textarea name="message" placeholder="Opisz swój biznes i to, co chcesz stworzyć..." rows="4" required></textarea></div>
+                
+                <div id="form-result" style="margin-top: 10px; font-weight: 600;"></div>
                 <button type="submit" class="btn btn-primary">Wyślij darmowe zapytanie</button>
             </form>
         </div>
