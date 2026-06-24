@@ -29,7 +29,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -2;
+    z-index: -1; /* Zmieniono z -2, aby być pod gridem ale nad body */
     pointer-events: none;
 }
 
@@ -102,41 +102,30 @@ body {
     background: rgba(0, 255, 242, 0.03);
 }
 
-/* Sekcje */
+/* Sekcje Hero zblokowane pod Scroll Trigger */
 .hero {
-    min-height: 100vh;
+    height: 100vh;
+    width: 100vw;
     display: flex;
     align-items: center;
-    padding: 100px 1.5rem 60px 1.5rem;
     position: relative;
-    z-index: 2;
+    padding: 0 10vw;
 }
 
 .hero-container {
     max-width: 1200px;
-    margin: 0 auto;
     width: 100%;
+    position: relative;
 }
 
-.morph-target {
+.ui-target {
     max-width: 850px;
-    perspective: 1000px;
+    position: relative;
 }
 
-.hero-title {
-    font-family: var(--font-tech);
-    font-size: clamp(1.8rem, 5vw, 3.8rem);
-    font-weight: 900;
-    line-height: 1.2;
-    margin-bottom: 2rem;
-    color: #ffffff;
-    transform-style: preserve-3d;
-}
-
-.fx-shatter .char {
-    display: inline-block;
-    will-change: transform, opacity;
-    transform-style: preserve-3d;
+/* Spacer na trójwymiarowe nagłówki generowane przez Three.js */
+.spacer-for-3d-text {
+    height: clamp(8rem, 20vh, 14rem);
 }
 
 .hero-subtitle {
@@ -145,7 +134,6 @@ body {
     line-height: 1.7;
     margin-bottom: 2.5rem;
     font-weight: 400;
-    will-change: transform, opacity;
 }
 
 .hero-subtitle b {
@@ -157,7 +145,6 @@ body {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    will-change: transform, opacity;
 }
 
 .btn {
@@ -193,10 +180,12 @@ body {
     transform: translateY(-3px);
 }
 
-/* INTERAKTYWNA SEKCJA KONTAKTOWA */
+/* KONTAKT Z INTERAKTYWNYMI EFEKTAMI WOW */
 .contact-section {
-    max-width: 1200px;
-    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 100px 1.5rem;
     position: relative;
     z-index: 10;
@@ -226,7 +215,7 @@ body {
     transition: border-color 0.4s, box-shadow 0.4s;
 }
 
-/* INTERAKTYWNA LINIA NEONOWA NA KRAWIĘDZIACH KARTY */
+/* Interaktywne neonowe obramowanie */
 .card-glow-line {
     position: absolute;
     top: 0;
@@ -244,7 +233,6 @@ body {
     transition: opacity 0.4s, filter 0.4s;
 }
 
-/* Karta aktywuje potężną łunę i blask neonów, gdy użytkownik klika pola */
 .contact-card.form-active {
     border-color: rgba(0, 255, 242, 0.35);
     box-shadow: 0 0 60px rgba(0, 255, 242, 0.12), inset 0 0 30px rgba(147, 51, 234, 0.08);
@@ -325,6 +313,7 @@ body {
     left: 0;
 }
 
+/*WOW Przycisk wysyłania z poświatą magnetyczną */
 .submit-btn-glow {
     width: 100%;
     border: none;
@@ -333,7 +322,6 @@ body {
     overflow: hidden;
 }
 
-/* WOW Efekt podświetlenia po najechaniu na przycisk wyślij */
 .submit-btn-glow::before {
     content: '';
     position: absolute;
@@ -353,9 +341,11 @@ body {
     transform: scale(0.98);
 }
 
+/* Mobile RWD */
 @media (max-width: 768px) {
     .nav-links { display: none; }
-    .hero { padding-top: 90px; padding-bottom: 40px; text-align: center; min-height: calc(100vh - 60px); }
+    .hero { padding: 0 5vw; text-align: center; }
+    .hero-container { padding-top: 80px; }
     .hero-cta { flex-direction: column; gap: 0.8rem; }
     .btn { width: 100%; }
     .contact-card { padding: 3rem 1.5rem; }
