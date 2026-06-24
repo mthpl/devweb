@@ -3,7 +3,7 @@
     --card-border: rgba(255, 255, 255, 0.07);
     --primary: #00fff2;
     --secondary: #9333ea;
-    --text-main: #f3f4f6;
+    --text-main: #ffffff; /* Wymuszenie czystej bieli dla czytelności */
     --text-muted: #abbad0;
     --font-tech: 'Orbitron', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -107,7 +107,7 @@ body {
     box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
 }
 
-/* Sekcje Hero z czystym tekstem */
+/* Sekcje Hero */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -126,8 +126,8 @@ body {
 /* Kontener poddawany atomizacji */
 .morph-target {
     max-width: 850px;
+    color: #ffffff; /* Bezpośrednia jasna biel chroniąca przed szarością */
     will-change: transform, filter, opacity, letter-spacing;
-    transition: letter-spacing 0.1s ease-out;
 }
 
 .hero-title {
@@ -136,6 +136,7 @@ body {
     font-weight: 900;
     line-height: 1.15;
     margin-bottom: 2.5rem;
+    color: #ffffff;
 }
 
 .hero-subtitle {
@@ -147,7 +148,7 @@ body {
 }
 
 .hero-subtitle b {
-    color: #fff;
+    color: #ffffff;
     font-weight: 600;
 }
 
@@ -166,8 +167,8 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(45deg, var(--primary), var(--secondary));
-    color: #000;
+    background: linear-gradient(45deg, var(--primary), var(--secondary)) !important;
+    color: #000000 !important;
     box-shadow: 0 0 30px rgba(0, 255, 242, 0.3);
 }
 
@@ -178,7 +179,7 @@ body {
 
 .btn-secondary {
     background: rgba(255, 255, 255, 0.02);
-    color: #fff;
+    color: #ffffff;
     border: 1px solid var(--card-border);
 }
 
