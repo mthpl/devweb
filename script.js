@@ -57,7 +57,7 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. ROZBICIE NALEŻĄCE TYLKO DO TEKSTU ---
+// --- 2. ROZBICIE TEKSTU NA LITERY ---
 document.querySelectorAll('.fx-shatter').forEach(title => {
     const text = title.innerHTML;
     title.innerHTML = '';
@@ -87,7 +87,7 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
 });
 
 
-// --- 3. DYNAMICZNA ZUNIFIKOWANA KONTROLA FAZ (ROZPAD I SCALANIE) ---
+// --- 3. UJEDNOLICONY SYSTEM SCALANIA I WYJŚCIA TEKSTU (JAK W SEKCOJI "KIM JESTEM") ---
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section, index) => {
@@ -107,53 +107,37 @@ particleSections.forEach((section, index) => {
         }
     });
 
-    // NOWA LOGIKA: Dynamiczne przypisywanie losowych stanów rozpadu per litera
-    const animData = Array.from(chars).map(() => ({
-        x: (Math.random() - 0.5) * window.innerWidth * 0.7,
-        y: (Math.random() - 0.6) * window.innerHeight * 0.7,
-        z: (Math.random() - 0.5) * 600,
-        rot: (Math.random() - 0.5) * 270
-    }));
+    // Ujednolicony algorytm lotu liter: każda litera na starcie przylatuje z losowej przestrzeni 3D
+    chars.forEach((char) => {
+        masterTimeline.from(char, {
+            x: () => (Math.random() - 0.5) * window.innerWidth * 0.7,
+            y: () => (Math.random() - 0.6) * window.innerHeight * 0.7,
+            z: () => (Math.random() - 0.5) * 600, // Nadlatywanie z głębokiego tła
+            rotationX: () => (Math.random() - 0.5) * 270,
+            rotationY: () => (Math.random() - 0.5) * 270,
+            opacity: 0,
+            filter: 'blur(10px)',
+            duration: 1
+        }, 0);
+    });
 
-    // KROK A: Jeśli to NIE JEST pierwsza sekcja, wymuszamy wejście (scalenie) z kosmosu od początku osi czasu
-    if (index > 0) {
-        chars.forEach((char, i) => {
-            masterTimeline.from(char, {
-                x: animData[i].x,
-                y: animData[i].y,
-                z: animData[i].z,
-                rotationX: animData[i].rot,
-                rotationY: animData[i].rot,
-                opacity: 0,
-                filter: 'blur(10px)',
-                duration: 0.5
-            }, 0);
-        });
-
-        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.4 }, 0.1);
-        if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.3 }, 0.2);
+    // Płynne włączanie / wyostrzanie opisów i przycisków równo ze scalaniem się liter nagłówka
+    if(subtitle) {
+        masterTimeline.from(subtitle, {
+            opacity: 0,
+            y: 30,
+            filter: 'blur(12px)',
+            duration: 0.8
+        }, 0.2);
     }
 
-    // Punkt kulminacyjny: tekst jest w 100% scalony, ostry i gotowy do czytania
-    masterTimeline.to({}, { duration: 0.3 });
-
-    // KROK B: Jeśli to NIE JEST ostatnia sekcja, płynnie przechodzimy do rozpadu liter (wyjście)
-    if (index < particleSections.length - 1) {
-        chars.forEach((char, i) => {
-            masterTimeline.to(char, {
-                x: animData[i].x,
-                y: animData[i].y,
-                z: animData[i].z,
-                rotationX: animData[i].rot,
-                rotationY: animData[i].rot,
-                opacity: 0,
-                filter: 'blur(8px)',
-                duration: 0.5
-            }, '+=0');
-        });
-
-        if(subtitle) masterTimeline.to(subtitle, { filter: 'blur(12px)', opacity: 0, y: -40, duration: 0.4 }, '-=0.5');
-        if(cta) masterTimeline.to(cta, { opacity: 0, filter: 'blur(8px)', y: -20, duration: 0.3 }, '-=0.5');
+    if(cta) {
+        masterTimeline.from(cta, {
+            opacity: 0,
+            y: 30,
+            filter: 'blur(8px)',
+            duration: 0.6
+        }, 0.4);
     }
 });
 
