@@ -106,3 +106,45 @@ sections.forEach((section) => {
         }
     }, 0); 
 });
+
+
+// --- OBSŁUGA FORMULARZA KONTAKTOWEGO (AJAX) ---
+const form = document.getElementById('contact-form-element');
+const result = document.getElementById('form-result');
+
+if(form) {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        result.style.color = "var(--primary)";
+        result.innerHTML = "Wysyłanie sygnału...";
+        
+        const formData = new FormData(form);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
+        })
+        .then(async (response) => {
+            let jsonRes = await response.json();
+            if (response.status == 200) {
+                result.style.color = "#00ff88"; 
+                result.innerHTML = "Wiadomość wysłana pomyślnie! Odezwię się niebawem.";
+                form.reset(); 
+            } else {
+                result.style.color = "#ff4444";
+                result.innerHTML = jsonRes.message;
+            }
+        })
+        .catch(error => {
+            result.style.color = "#ff4444";
+            result.innerHTML = "Coś poszło nie tak... Spróbuj ponownie później.";
+        });
+    });
+}
