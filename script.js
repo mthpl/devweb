@@ -1,6 +1,6 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// --- 1. ORYGINALNE, ZWERYFIKOWANE TŁO KOSMICZNE THREE.JS ---
+// --- 1. ODZYSKANE, ORYGINALNE TŁO TRZYWYMIAROWE ---
 const canvas = document.querySelector('#webgl-canvas');
 const scene = new THREE.Scene();
 
@@ -40,6 +40,7 @@ document.addEventListener('mousemove', (event) => {
 const clock = new THREE.Clock();
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
+    
     particleSystem.rotation.y = elapsedTime * 0.04;
     particleSystem.rotation.x += ( -mouseY * 0.4 - particleSystem.rotation.x ) * 0.05;
     particleSystem.rotation.y += ( mouseX * 0.4 - particleSystem.rotation.y ) * 0.05;
@@ -56,15 +57,14 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. DESTRUKCJA TEKSTU NA CYFROWY PYŁ (MATRIX DEINTEGRATION) ---
-document.querySelectorAll('.fx-matrix').forEach(title => {
+// --- 2. ROZBICIE NALEŻĄCE TYLKO DO TEKSTU ---
+document.querySelectorAll('.fx-shatter').forEach(title => {
     const text = title.innerHTML;
     title.innerHTML = '';
     
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = text;
     
-    // Rozbijamy nagłówki strukturalnie na litery owinięte w kody binarne
     const processNodes = (node, output) => {
         node.childNodes.forEach(child => {
             if (child.nodeType === Node.TEXT_NODE) {
@@ -72,9 +72,7 @@ document.querySelectorAll('.fx-matrix').forEach(title => {
                     if(char === ' ') {
                         output.innerHTML += ' ';
                     } else {
-                        // Losujemy 0 lub 1 jako reprezentację piksela w kodzie
-                        const randomBit = Math.random() > 0.5 ? '1' : '0';
-                        output.innerHTML += `<span class="matrix-char" data-char="${randomBit}">${char}</span>`;
+                        output.innerHTML += `<span class="char">${char}</span>`;
                     }
                 });
             } else if (child.nodeType === Node.ELEMENT_NODE) {
@@ -88,72 +86,88 @@ document.querySelectorAll('.fx-matrix').forEach(title => {
     processNodes(tempDiv, title);
 });
 
-// Sterowanie transformacją rozpadu tekstu w ScrollTrigger
+// --- 3. DWUKIERUNKOWA ANIMACJA WEJŚCIA I WYJŚCIA SEKCOJI ---
 const particleSections = document.querySelectorAll('.particle-section');
 
-particleSections.forEach((section) => {
-    const chars = section.querySelectorAll('.matrix-char');
+particleSections.forEach((section, index) => {
+    const chars = section.querySelectorAll('.char');
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    const tl = gsap.timeline({
+    // Nadpisujemy domyślne style startowe – wszystko na dzień dobry jest OSTRY i widoczny
+    gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, filter: 'blur(0px)' });
+    if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0, filter: 'blur(0px)' });
+    if(cta) gsap.set(cta, { opacity: 1, y: 0, filter: 'blur(0px)' });
+
+    // Główny Master Timeline dla przypiętej sekcji
+    const masterTl = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '+=100%',
+            end: '+=150%', // Zwiększony dystans scrollowania dla płynności
             scrub: 1,
             pin: true,
             anticipatePin: 1
         }
     });
 
-    // Algorytm transformacji liter w miniaturowy pył binarny
-    chars.forEach((char) => {
-        // Losowe wektory wystrzału cząsteczek
-        const moveX = (Math.random() - 0.5) * window.innerWidth * 0.7;
-        const moveY = (Math.random() - 0.7) * window.innerHeight * 0.7;
-        const moveZ = (Math.random() - 0.5) * 400;
-        const rotX = (Math.random() - 0.5) * 500;
-        const rotY = (Math.random() - 0.5) * 500;
+    // KROK A: Jeśli to nie jest pierwsza sekcja, najpierw tworzymy animację SCALANIA (wejścia) z kosmosu
+    if (index > 0) {
+        const introTl = gsap.timeline();
+        
+        chars.forEach((char) => {
+            introTl.from(char, {
+                x: () => (Math.random() - 0.5) * window.innerWidth * 0.6,
+                y: () => (Math.random() - 0.6) * window.innerHeight * 0.6,
+                z: () => (Math.random() - 0.5) * 500,
+                rotationX: () => (Math.random() - 0.5) * 180,
+                rotationY: () => (Math.random() - 0.5) * 180,
+                opacity: 0,
+                filter: 'blur(10px)',
+                duration: 1
+            }, 0);
+        });
 
-        // W ułamku sekundy duża litera znika, a aktywuje się malutka cząsteczka kodu w pseudo-elemencie
-        tl.to(char, {
-            color: 'transparent', // Ukrywamy oryginalną literę
-            textShadow: 'none',
-            x: moveX,
-            y: moveY,
-            z: moveZ,
-            rotationX: rotX,
-            rotationY: rotY,
-            filter: 'blur(1px)', // Zachowujemy ostrość cyfrowego piksela
-            opacity: 0,
-            duration: 1,
-            onStart: () => char.classList.add('disintegrating'),
-        }, 0);
-    });
+        if(subtitle) introTl.from(subtitle, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.8 }, 0.2);
+        if(cta) introTl.from(cta, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.6 }, 0.4);
 
-    // Opisy i przyciski płynnie gasną rozmywając się, dając przestrzeń dla cząsteczek nagłówka
-    if(subtitle) {
-        tl.to(subtitle, {
-            filter: 'blur(15px)',
-            opacity: 0,
-            y: -40,
-            duration: 0.8
-        }, 0);
+        masterTl.add(introTl);
     }
 
-    if(cta) {
-        tl.to(cta, {
-            opacity: 0,
-            filter: 'blur(10px)',
-            y: 20,
-            duration: 0.6
-        }, 0);
+    // Mała chwila stabilizacji (odpoczynek tekstu na ekranie podczas czytania)
+    masterTl.to({}, { duration: 0.5 });
+
+    // KROK B: Jeśli to nie jest ostatnia sekcja, dodajemy animację ROZPADU (wyjścia) w przestrzeń
+    if (index < particleSections.length - 1) {
+        const outroTl = gsap.timeline();
+
+        chars.forEach((char) => {
+            const randomX = (Math.random() - 0.5) * window.innerWidth * 0.7;
+            const randomY = (Math.random() - 0.6) * window.innerHeight * 0.7;
+            const randomZ = (Math.random() - 0.5) * 600; 
+            const randomRot = (Math.random() - 0.5) * 270;
+
+            outroTl.to(char, {
+                x: randomX,
+                y: randomY,
+                z: randomZ,
+                rotationX: randomRot,
+                rotationY: randomRot,
+                opacity: 0,
+                filter: 'blur(8px)',
+                duration: 1
+            }, 0);
+        });
+
+        if(subtitle) outroTl.to(subtitle, { filter: 'blur(12px)', opacity: 0, y: -40, duration: 0.8 }, 0);
+        if(cta) outroTl.to(cta, { opacity: 0, filter: 'blur(8px)', y: -20, duration: 0.6 }, 0);
+
+        masterTl.add(outroTl);
     }
 });
 
 
-// --- 3. OBSŁUGA FORMULARZA KONTAKTOWEGO (AJAX) ---
+// --- 4. OBSŁUGA FORMULARZA KONTAKTOWEGO (AJAX) ---
 const form = document.getElementById('contact-form-element');
 const result = document.getElementById('form-result');
 
