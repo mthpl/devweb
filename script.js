@@ -1,6 +1,6 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// --- SEKCJA THREE.JS: INTERAKTYWNA PRZESTRZEŃ KOSMICZNA ---
+// --- SEKCJA THREE.JS: STABILNE INTERAKTYWNE TŁO ---
 const canvas = document.querySelector('#webgl-canvas');
 const scene = new THREE.Scene();
 
@@ -35,7 +35,6 @@ let mouseX = 0;
 let mouseY = 0;
 let targetX = 0;
 let targetY = 0;
-let speedMultiplier = 1; 
 
 document.addEventListener('mousemove', (event) => {
     mouseX = (event.clientX / window.innerWidth) - 0.5;
@@ -47,13 +46,9 @@ const clock = new THREE.Clock();
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
     
-    particleSystem.rotation.y = elapsedTime * (0.04 * speedMultiplier);
-    
-    if(speedMultiplier > 1) {
-        particleSystem.position.z = (speedMultiplier - 1) * 1.5;
-    } else {
-        particleSystem.position.z = 0;
-    }
+    // USUNIĘTO PRZYSPIESZANIE TŁA - tło obraca się zawsze ze stałą, płynną prędkością bazową
+    particleSystem.rotation.y = elapsedTime * 0.04;
+    particleSystem.position.z = 0;
 
     targetX = mouseX * 2.8;
     targetY = -mouseY * 2.8;
@@ -74,10 +69,14 @@ window.addEventListener('resize', () => {
 
 
 // --- SEKCJA INTERAKTYWNEGO ROZPADU I SCALANIA TEKSTU (MORPHING) ---
+// Poprawione wartości filtrów i stanów początkowych, by teksty i przyciski były idealnie kolorowe na starcie
 const sections = document.querySelectorAll('.particle-section');
 
 sections.forEach((section) => {
     const textBlock = section.querySelector('.morph-target');
+
+    // Ustawienie czystego stanu początkowego (brak rozmycia, pełna widoczność)
+    gsap.set(textBlock, { filter: 'blur(0px) contrast(100%)', opacity: 1, letterSpacing: '0px' });
 
     const morphTl = gsap.timeline({
         scrollTrigger: {
@@ -97,14 +96,8 @@ sections.forEach((section) => {
         scale: 1.1,                
         y: -100,                    
         duration: 1
-    })
-    .to({}, {
-        duration: 1,
-        onUpdate: function() {
-            let progress = this.progress();
-            speedMultiplier = 1 + (progress * 15);
-        }
-    }, 0); 
+    });
+    // USUNIĘTO MODYFIKACJĘ PRĘDKOŚCI GWIAZD (speedMultiplier)
 });
 
 
