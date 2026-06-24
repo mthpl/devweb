@@ -1,303 +1,124 @@
-gsap.registerPlugin(ScrollTrigger);
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>DevVibe Labs — Tworzenie Stron WWW & Aplikacji Android | Freelancer Full-Stack</title>
+    <meta name="description" content="Profesjonalne tworzenie stron www, dedykowanych aplikacji Android, nowoczesnych landing page oraz wizytówek firmowych. Skuteczne pozycjonowanie SEO, integracje z systemami rezerwacji.">
+    <meta name="robots" content="index, follow">
 
-const isMobile = window.innerWidth <= 768;
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
 
-// --- 1. THREE.JS ANIMATED BACKGROUND ---
-const canvas = document.querySelector('#webgl-canvas');
-const scene = new THREE.Scene();
+    <canvas id="webgl-canvas"></canvas>
+    <div class="cyber-grid"></div>
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
+    <nav class="navbar" role="navigation" aria-label="Główne menu">
+        <div class="nav-container">
+            <a href="#" class="logo">⚡ DEV<span class="gradient-text">VIBE</span> LABS</a>
+            <div class="nav-links">
+                <a href="#strony">Strony WWW</a>
+                <a href="#aplikacje">Aplikacje Android</a>
+                <a href="#o-mnie">O mnie</a>
+                <a href="#kontakt" class="nav-btn">Wycena</a>
+            </div>
+        </div>
+    </nav>
 
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: !isMobile, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    <main>
+        <section id="strony" class="hero particle-section">
+            <div class="hero-container">
+                <article class="hero-content morph-target">
+                    <h1 class="hero-title fx-shatter">Budowa stron WWW<br><span class="gradient-text text-glow">Dlaczego warto?</span></h1>
+                    <p class="hero-subtitle">
+                        W dzisiejszych czasach Twoja strona to najważniejszy sprzedawca. Dobrze wypozycjonowana witryna (<b>SEO</b>) sprawia, że klienci sami Cię znajdują w Google, co bezpośrednio przekłada się na realny zysk. 
+                        <br><br>
+                        Projektuję <b>personalizowane strony www idealnie dostosowane do specyfiki Twojego biznesu</b> – od prostych, eleganckich wizytówek i nowoczesnych <strong>landing page</strong>'y, po rozbudowane serwisy komercyjne. Potrzebujesz systemu rezerwacji online, integracji z kalendarzem lub zewnętrznymi narzędziami CRM? Żaden problem. Wszystko połączę w jedną, spójną i stabilną całość.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#kontakt" class="btn btn-primary">Zbuduj stronę ze mną</a>
+                        <a href="#aplikacje" class="btn btn-secondary">Zobacz aplikacje</a>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-const particlesGeometry = new THREE.BufferGeometry();
-const count = isMobile ? 800 : 1800;
-const positions = new Float32Array(count * 3);
+        <section id="aplikacje" class="hero particle-section">
+            <div class="hero-container">
+                <article class="hero-content morph-target">
+                    <h2 class="hero-title fx-shatter">Budowa dedykowanych<br><span class="gradient-text text-glow">Aplikacji Android</span></h2>
+                    <p class="hero-subtitle">
+                        Szukasz sposobu na ułatwienie codziennej pracy w firmie lub chcesz wejść na nowy poziom marketingowego zaangażowania? Tworzę <b>proste, niezwykle przydatne aplikacje mobilne</b>, które ułatwiają życie Twoim klientom i Tobie.
+                        <br><br>
+                        Mogą to być natywne aplikacje narzędziowe wspierające biznes na co dzień, zaawansowane systemy z inteligentnymi powiadomieniami PUSH przypominającymi o Twojej marce, programy lojalnościowe podnoszące sprzedaż lub aplikacje dedykowane procesom logistycznym. Ogranicza nas tylko wyobraźnia – zamienię Twój unikalny pomysł w gotową do pobrania aplikację na telefon komórkowy.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#kontakt" class="btn btn-primary">Zaprojektuj aplikację</a>
+                        <a href="#o-mnie" class="btn btn-secondary">Poznaj mnie lepiej</a>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-for (let i = 0; i < count * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * 12;
-}
-particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        <section id="o-mnie" class="hero particle-section">
+            <div class="hero-container">
+                <article class="hero-content morph-target">
+                    <h2 class="hero-title fx-shatter">Kim jestem?<br><span class="gradient-text text-glow">Programista z Pasji</span></h2>
+                    <p class="hero-subtitle">
+                        Działam jako niezależny <b>freelancer</b>, a kodowanie nowoczesnych witryn internetowych oraz dedykowanych aplikacji mobilnych to moja wieloletnia, hobbistyczna pasja. Co to oznacza bezpośrednio dla Ciebie? Brak korporacyjnego bełkotu, elastyczność czasową oraz maksymalne zaangażowanie w Twój projekt bez zbędnych pośredników.
+                        <br><br>
+                        Moim największym atutem projektowym jest unikalna umiejętność <b>dokładnego przeniesienia wizji klienta bezpośrednio na ekran komputera lub telefonu</b>. Nie musisz znać się na technologii ani zawiłościach kodu – uważnie wysłucham Twoich potrzeb, przeanalizuję Twój biznes i rzetelnie doradzę najlepsze, najbardziej opłacalne rozwiązania techniczne. Twoje zadowolenie oraz sukces biznesowy to mój główny priorytet.
+                    </p>
+                </article>
+            </div>
+        </section>
 
-const particlesMaterial = new THREE.PointsMaterial({
-    size: isMobile ? 0.05 : 0.04,
-    color: 0x00fff2,
-    transparent: true,
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending
-});
+        <section id="kontakt" class="contact-section">
+            <div class="contact-card interactive-glow-card">
+                <div class="card-glow-line"></div>
+                
+                <h2 class="font-tech-heading text-glow">Porozmawiajmy o projekcie</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-size: 0.95rem;">Napisz, czego potrzebujesz. Profesjonalne doradztwo i wstępna wycena projektu są całkowicie bezpłatne.</p>
+                
+                <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contact-form-element">
+                    <input type="hidden" name="access_key" value="8176e9ae-0eda-4450-a91d-996b0d07e5a8">
+                    <input type="checkbox" name="botcheck" style="display: none;">
 
-const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
-scene.add(particleSystem);
-
-let mouseX = 0, mouseY = 0;
-
-document.addEventListener('mousemove', (event) => {
-    mouseX = (event.clientX / window.innerWidth) - 0.5;
-    mouseY = (event.clientY / window.innerHeight) - 0.5;
-});
-
-document.addEventListener('touchmove', (event) => {
-    if (event.touches.length > 0) {
-        mouseX = (event.touches[0].clientX / window.innerWidth) - 0.5;
-        mouseY = (event.touches[0].clientY / window.innerHeight) - 0.5;
-    }
-}, { passive: true });
-
-const clock = new THREE.Clock();
-const tick = () => {
-    const elapsedTime = clock.getElapsedTime();
-    particleSystem.rotation.y = elapsedTime * 0.03;
-    particleSystem.rotation.x += (-mouseY * 0.3 - particleSystem.rotation.x) * 0.05;
-    particleSystem.rotation.y += (mouseX * 0.3 - particleSystem.rotation.y) * 0.05;
-    renderer.render(scene, camera);
-    window.requestAnimationFrame(tick);
-};
-tick();
-
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-
-// --- 2. CHAR SPLITTER — respects <br> and nested tags ---
-document.querySelectorAll('.fx-shatter').forEach(title => {
-    const fragment = document.createDocumentFragment();
-
-    const extractChars = (node, inheritedClasses = '') => {
-        Array.from(node.childNodes).forEach(child => {
-            if (child.nodeType === Node.TEXT_NODE) {
-                child.textContent.split('').forEach(char => {
-                    if (char === ' ') {
-                        fragment.appendChild(document.createTextNode('\u00A0'));
-                    } else {
-                        const span = document.createElement('span');
-                        span.className = ('char ' + inheritedClasses).trim();
-                        span.textContent = char;
-                        fragment.appendChild(span);
-                    }
-                });
-            } else if (child.nodeType === Node.ELEMENT_NODE) {
-                if (child.tagName.toLowerCase() === 'br') {
-                    fragment.appendChild(document.createElement('br'));
-                } else {
-                    extractChars(child, child.className || '');
-                }
-            }
-        });
-    };
-
-    extractChars(title);
-    title.innerHTML = '';
-    title.appendChild(fragment);
-});
-
-
-// --- 3. SCROLL-PINNED SHATTER / ASSEMBLE ANIMATIONS ---
-const particleSections = document.querySelectorAll('.particle-section');
-const VW = window.innerWidth;
-const VH = window.innerHeight;
-
-particleSections.forEach((section, index) => {
-    const chars = section.querySelectorAll('.char');
-    const subtitle = section.querySelector('.hero-subtitle');
-    const cta = section.querySelector('.hero-cta');
-
-    // === ASSEMBLE animation (chars fly in from random space) ===
-    // Defined per-char so values are stable across scrub direction
-    const charData = Array.from(chars).map(() => ({
-        startX: (Math.random() - 0.5) * (isMobile ? 200 : VW * 1.2),
-        startY: (Math.random() - 0.5) * (isMobile ? 160 : VH * 1.0),
-        startZ: isMobile ? 0 : (Math.random() - 0.5) * 500,
-        startRot: (Math.random() - 0.5) * 270
-    }));
-
-    const endCharData = Array.from(chars).map(() => ({
-        endX: (Math.random() - 0.5) * (isMobile ? 250 : VW * 1.4),
-        endY: (Math.random() - 0.5) * (isMobile ? 200 : VH * 1.2),
-        endZ: isMobile ? 0 : (Math.random() - 0.5) * 700,
-        endRot: (Math.random() - 0.5) * 360
-    }));
-
-    // Set all chars visible and at natural position initially
-    gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
-    if (subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
-    if (cta) gsap.set(cta, { opacity: 1, y: 0 });
-
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            end: '+=160%',
-            scrub: 1.2,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true
-        }
-    });
-
-    // == PHASE 1 — ASSEMBLE (only sections 2 and 3) ==
-    if (index > 0) {
-        chars.forEach((char, i) => {
-            const d = charData[i];
-            tl.fromTo(char,
-                {
-                    x: d.startX,
-                    y: d.startY,
-                    z: d.startZ,
-                    rotationX: d.startRot,
-                    rotationY: d.startRot,
-                    scale: 0.2,
-                    opacity: 0
-                },
-                {
-                    x: 0, y: 0, z: 0,
-                    rotationX: 0, rotationY: 0,
-                    scale: 1, opacity: 1,
-                    duration: 0.5,
-                    ease: 'power2.out'
-                },
-                0   // all start at the same timeline position → parallel
-            );
-        });
-
-        if (subtitle) {
-            tl.fromTo(subtitle,
-                { opacity: 0, y: 40 },
-                { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
-                0.1
-            );
-        }
-        if (cta) {
-            tl.fromTo(cta,
-                { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },
-                0.2
-            );
-        }
-    }
-
-    // == Legibility pause ==
-    tl.to({}, { duration: 0.5 });
-
-    // == PHASE 2 — SHATTER (all sections except the last) ==
-    if (index < particleSections.length - 1) {
-        chars.forEach((char, i) => {
-            const d = endCharData[i];
-            tl.to(char, {
-                x: d.endX,
-                y: d.endY,
-                z: d.endZ,
-                rotationX: d.endRot,
-                rotationY: d.endRot,
-                scale: 0,
-                opacity: 0,
-                duration: 0.5,
-                ease: 'power2.in'
-            }, '>-0.05');   // tiny stagger for wave feel, all relative to last
-        });
-
-        if (subtitle) {
-            tl.to(subtitle, { opacity: 0, y: -50, duration: 0.4, ease: 'power2.in' }, '<');
-        }
-        if (cta) {
-            tl.to(cta, { opacity: 0, y: -30, duration: 0.3, ease: 'power2.in' }, '<');
-        }
-    }
-});
-
-
-// --- 4. CONTACT CARD ENTRANCE ANIMATION ---
-const contactSection = document.querySelector('.contact-section');
-const contactCard = document.querySelector('.contact-card');
-
-if (contactCard) {
-    gsap.fromTo(contactCard,
-        {
-            opacity: 0,
-            y: 60,
-            scale: 0.94
-        },
-        {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: contactSection,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            }
-        }
-    );
-
-    // Glow pulse animation on the border line
-    gsap.to('.card-glow-line', {
-        opacity: 0.35,
-        duration: 2.5,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1
-    });
-}
-
-
-// --- 5. FORM INTERACTIVITY ---
-const formCard = document.querySelector('.contact-card');
-const formInputs = document.querySelectorAll('.custom-input-group input, .custom-input-group textarea');
-
-formInputs.forEach(input => {
-    input.addEventListener('focus', () => {
-        formCard.classList.add('form-active');
-    });
-    input.addEventListener('blur', () => {
-        const anyActive = Array.from(formInputs).some(inp => inp === document.activeElement);
-        if (!anyActive) {
-            formCard.classList.remove('form-active');
-        }
-    });
-});
-
-// AJAX form submit
-const form = document.getElementById('contact-form-element');
-const result = document.getElementById('form-result');
-
-if (form) {
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        result.style.color = 'var(--primary)';
-        result.innerHTML = 'Wysyłanie sygnału...';
-
-        const formData = new FormData(form);
-        const object = Object.fromEntries(formData);
-        const json = JSON.stringify(object);
-
-        fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: json
-        })
-            .then(async (response) => {
-                let jsonRes = await response.json();
-                if (response.status === 200) {
-                    result.style.color = '#00ff88';
-                    result.innerHTML = 'Wiadomość wysłana pomyślnie! Odezwę się niebawem.';
-                    form.reset();
-                    formCard.classList.remove('form-active');
-                } else {
-                    result.style.color = '#ff4444';
-                    result.innerHTML = jsonRes.message;
-                }
-            })
-            .catch(() => {
-                result.style.color = '#ff4444';
-                result.innerHTML = 'Coś poszło nie tak... Spróbuj ponownie później.';
-            });
-    });
-}
+                    <div class="form-group custom-input-group">
+                        <input type="text" name="name" id="form-name" required placeholder=" ">
+                        <label for="form-name">Twoje Imię</label>
+                        <div class="input-bar"></div>
+                    </div>
+                    
+                    <div class="form-group custom-input-group">
+                        <input type="email" name="email" id="form-email" required placeholder=" ">
+                        <label for="form-email">Twój E-mail</label>
+                        <div class="input-bar"></div>
+                    </div>
+                    
+                    <div class="form-group custom-input-group">
+                        <textarea name="message" id="form-msg" rows="4" required placeholder=" "></textarea>
+                        <label for="form-msg">Opisz swój biznes i to, co chcesz stworzyć...</label>
+                        <div class="input-bar"></div>
+                    </div>
+                    
+                    <div id="form-result" style="margin-top: 10px; font-weight: 600;"></div>
+                    <button type="submit" class="btn btn-primary submit-btn-glow">Wyślij darmowe zapytanie</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>
