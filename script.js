@@ -1,6 +1,6 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// --- 1. ODZYSKANE, ORYGINALNE TŁO TRZYWYMIAROWE ---
+// --- 1. ORYGINALNE TŁO THREE.JS ---
 const canvas = document.querySelector('#webgl-canvas');
 const scene = new THREE.Scene();
 
@@ -86,7 +86,8 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
     processNodes(tempDiv, title);
 });
 
-// --- 3. DWUKIERUNKOWA ANIMACJA WEJŚCIA I WYJŚCIA SEKCOJI ---
+
+// --- 3. DYNAMICZNA ZUNIFIKOWANA KONTROLA FAZ (ROZPAD I SCALANIE) ---
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section, index) => {
@@ -94,75 +95,65 @@ particleSections.forEach((section, index) => {
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    // Nadpisujemy domyślne style startowe – wszystko na dzień dobry jest OSTRY i widoczny
-    gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, filter: 'blur(0px)' });
-    if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0, filter: 'blur(0px)' });
-    if(cta) gsap.set(cta, { opacity: 1, y: 0, filter: 'blur(0px)' });
-
-    // Główny Master Timeline dla przypiętej sekcji
-    const masterTl = gsap.timeline({
+    // Główny proces przypięcia sekcji (Scroll pinning)
+    const masterTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '+=150%', // Zwiększony dystans scrollowania dla płynności
+            end: '+=100%',
             scrub: 1,
             pin: true,
             anticipatePin: 1
         }
     });
 
-    // KROK A: Jeśli to nie jest pierwsza sekcja, najpierw tworzymy animację SCALANIA (wejścia) z kosmosu
+    // NOWA LOGIKA: Dynamiczne przypisywanie losowych stanów rozpadu per litera
+    const animData = Array.from(chars).map(() => ({
+        x: (Math.random() - 0.5) * window.innerWidth * 0.7,
+        y: (Math.random() - 0.6) * window.innerHeight * 0.7,
+        z: (Math.random() - 0.5) * 600,
+        rot: (Math.random() - 0.5) * 270
+    }));
+
+    // KROK A: Jeśli to NIE JEST pierwsza sekcja, wymuszamy wejście (scalenie) z kosmosu od początku osi czasu
     if (index > 0) {
-        const introTl = gsap.timeline();
-        
-        chars.forEach((char) => {
-            introTl.from(char, {
-                x: () => (Math.random() - 0.5) * window.innerWidth * 0.6,
-                y: () => (Math.random() - 0.6) * window.innerHeight * 0.6,
-                z: () => (Math.random() - 0.5) * 500,
-                rotationX: () => (Math.random() - 0.5) * 180,
-                rotationY: () => (Math.random() - 0.5) * 180,
+        chars.forEach((char, i) => {
+            masterTimeline.from(char, {
+                x: animData[i].x,
+                y: animData[i].y,
+                z: animData[i].z,
+                rotationX: animData[i].rot,
+                rotationY: animData[i].rot,
                 opacity: 0,
                 filter: 'blur(10px)',
-                duration: 1
+                duration: 0.5
             }, 0);
         });
 
-        if(subtitle) introTl.from(subtitle, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.8 }, 0.2);
-        if(cta) introTl.from(cta, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.6 }, 0.4);
-
-        masterTl.add(introTl);
+        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.4 }, 0.1);
+        if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.3 }, 0.2);
     }
 
-    // Mała chwila stabilizacji (odpoczynek tekstu na ekranie podczas czytania)
-    masterTl.to({}, { duration: 0.5 });
+    // Punkt kulminacyjny: tekst jest w 100% scalony, ostry i gotowy do czytania
+    masterTimeline.to({}, { duration: 0.3 });
 
-    // KROK B: Jeśli to nie jest ostatnia sekcja, dodajemy animację ROZPADU (wyjścia) w przestrzeń
+    // KROK B: Jeśli to NIE JEST ostatnia sekcja, płynnie przechodzimy do rozpadu liter (wyjście)
     if (index < particleSections.length - 1) {
-        const outroTl = gsap.timeline();
-
-        chars.forEach((char) => {
-            const randomX = (Math.random() - 0.5) * window.innerWidth * 0.7;
-            const randomY = (Math.random() - 0.6) * window.innerHeight * 0.7;
-            const randomZ = (Math.random() - 0.5) * 600; 
-            const randomRot = (Math.random() - 0.5) * 270;
-
-            outroTl.to(char, {
-                x: randomX,
-                y: randomY,
-                z: randomZ,
-                rotationX: randomRot,
-                rotationY: randomRot,
+        chars.forEach((char, i) => {
+            masterTimeline.to(char, {
+                x: animData[i].x,
+                y: animData[i].y,
+                z: animData[i].z,
+                rotationX: animData[i].rot,
+                rotationY: animData[i].rot,
                 opacity: 0,
                 filter: 'blur(8px)',
-                duration: 1
-            }, 0);
+                duration: 0.5
+            }, '+=0');
         });
 
-        if(subtitle) outroTl.to(subtitle, { filter: 'blur(12px)', opacity: 0, y: -40, duration: 0.8 }, 0);
-        if(cta) outroTl.to(cta, { opacity: 0, filter: 'blur(8px)', y: -20, duration: 0.6 }, 0);
-
-        masterTl.add(outroTl);
+        if(subtitle) masterTimeline.to(subtitle, { filter: 'blur(12px)', opacity: 0, y: -40, duration: 0.4 }, '-=0.5');
+        if(cta) masterTimeline.to(cta, { opacity: 0, filter: 'blur(8px)', y: -20, duration: 0.3 }, '-=0.5');
     }
 });
 
