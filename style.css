@@ -5,7 +5,7 @@
     --primary: #00fff2;
     --secondary: #9333ea;
     --text-main: #f3f4f6;
-    --text-muted: #94a3b8;
+    --text-muted: #abbad0;
     --font-tech: 'Orbitron', sans-serif;
     --font-body: 'Inter', sans-serif;
 }
@@ -25,7 +25,7 @@ body {
     min-height: 100vh;
 }
 
-/* OKNO WEBGL (CAŁE TŁO) */
+/* TŁO WEBGL */
 #webgl-canvas {
     position: fixed;
     top: 0;
@@ -36,7 +36,6 @@ body {
     pointer-events: none;
 }
 
-/* Cybernetyczna siatka nakładana na spód */
 .cyber-grid {
     position: fixed;
     top: 0;
@@ -51,7 +50,7 @@ body {
     opacity: 0.7;
 }
 
-/* Typografia i Styl */
+/* Przejścia stylów tekstowych */
 .gradient-text {
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
@@ -97,7 +96,10 @@ body {
     margin-left: 2.5rem;
     font-size: 0.95rem;
     font-weight: 600;
+    transition: color 0.3s;
 }
+
+.nav-links a:hover { color: var(--primary); }
 
 .nav-links .nav-btn {
     border: 1px solid var(--primary);
@@ -107,12 +109,12 @@ body {
     box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
 }
 
-/* Hero */
+/* Hero & Sekcje Treści */
 .hero {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 140px 2rem 60px 2rem;
+    padding: 120px 2rem 120px 2rem;
 }
 
 .hero-container {
@@ -122,38 +124,28 @@ body {
 }
 
 .hero-content {
-    max-width: 800px;
-}
-
-.badge-tech {
-    display: inline-block;
-    background: rgba(0, 255, 242, 0.07);
-    border: 1px solid rgba(0, 255, 242, 0.3);
-    padding: 0.5rem 1.2rem;
-    border-radius: 50px;
-    margin-bottom: 2rem;
-}
-
-.badge-tech span {
-    font-family: var(--font-tech);
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-    color: var(--primary);
+    max-width: 850px;
 }
 
 .hero-title {
     font-family: var(--font-tech);
-    font-size: clamp(2.5rem, 6.5vw, 4.8rem);
+    font-size: clamp(2.3rem, 6vw, 4.2rem);
     font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 2rem;
+    line-height: 1.15;
+    margin-bottom: 2.5rem;
 }
 
 .hero-subtitle {
     color: var(--text-muted);
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    line-height: 1.7;
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    line-height: 1.8;
     margin-bottom: 3rem;
+    font-weight: 400;
+}
+
+.hero-subtitle b, .hero-subtitle strong {
+    color: #fff;
+    font-weight: 600;
 }
 
 .hero-cta {
@@ -193,92 +185,29 @@ body {
     transform: translateY(-4px);
 }
 
-/* Sekcja Usług */
-.services-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 120px 2rem;
-}
-
-.section-header {
+/* SEKCJA ZAAWANSOWANEGO PRZEJŚCIA TEKSTOWEGO */
+.transition-container {
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
     text-align: center;
-    margin-bottom: 6rem;
 }
 
-.section-header h2 {
+.dissolve-text {
     font-family: var(--font-tech);
-    font-size: clamp(2rem, 4vw, 3rem);
-    margin-bottom: 1.5rem;
-}
-
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 3rem;
-}
-
-/* Zaawansowana Karta Parallax 3D */
-.card-3d {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 28px;
-    padding: 4rem 2.5rem;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    transition: border-color 0.4s, box-shadow 0.4s;
-    cursor: pointer;
-}
-
-.card-3d:hover {
-    border-color: rgba(0, 255, 242, 0.4);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(0, 255, 242, 0.1);
-}
-
-.card-inner {
-    transform-style: preserve-3d;
-    pointer-events: none;
-}
-
-.card-layer {
-    transition: transform 0.1s ease-out;
-    transform-style: preserve-3d;
-}
-
-.card-icon {
-    font-size: 3.5rem;
-    margin-bottom: 2rem;
-}
-
-.card-3d h3 {
-    font-family: var(--font-tech);
-    font-size: 1.6rem;
-    margin-bottom: 1.2rem;
-}
-
-.card-3d p {
-    color: var(--text-muted);
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
-}
-
-.card-tech-stack span {
-    background: rgba(0, 255, 242, 0.04);
-    padding: 0.4rem 1rem;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-family: var(--font-tech);
-    color: var(--primary);
-    border: 1px solid rgba(0, 255, 242, 0.15);
-    margin-right: 0.5rem;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 2px;
+    will-change: transform, filter, opacity;
 }
 
 /* Kontakt */
 .contact-section {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 2rem 140px 2rem;
+    padding: 120px 2rem;
 }
 
 .contact-card {
@@ -290,6 +219,12 @@ body {
     margin: 0 auto;
     text-align: center;
     backdrop-filter: blur(20px);
+}
+
+.contact-card h2 {
+    font-family: var(--font-tech);
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
 }
 
 .contact-form {
@@ -307,6 +242,7 @@ body {
     border-radius: 14px;
     color: #fff;
     font-size: 1rem;
+    font-family: var(--font-body);
 }
 
 .form-group input:focus, .form-group textarea:focus {
@@ -317,7 +253,7 @@ body {
 
 @media (max-width: 968px) {
     .nav-links { display: none; }
-    .hero { text-align: center; }
+    .hero { text-align: center; padding-top: 100px; padding-bottom: 60px; }
     .hero-cta { justify-content: center; }
-    .services-grid { grid-template-columns: 1fr; }
+    .transition-container { height: 40vh; }
 }
