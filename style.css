@@ -29,7 +29,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1; /* Zmieniono z -2, aby być pod gridem ale nad body */
+    z-index: -2;
     pointer-events: none;
 }
 
@@ -102,30 +102,41 @@ body {
     background: rgba(0, 255, 242, 0.03);
 }
 
-/* Sekcje Hero zblokowane pod Scroll Trigger */
+/* Sekcje */
 .hero {
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
     display: flex;
     align-items: center;
+    padding: 100px 1.5rem 60px 1.5rem;
     position: relative;
-    padding: 0 10vw;
+    z-index: 2;
 }
 
 .hero-container {
     max-width: 1200px;
+    margin: 0 auto;
     width: 100%;
-    position: relative;
 }
 
-.ui-target {
+.morph-target {
     max-width: 850px;
-    position: relative;
+    perspective: 1000px;
 }
 
-/* Spacer na trójwymiarowe nagłówki generowane przez Three.js */
-.spacer-for-3d-text {
-    height: clamp(8rem, 20vh, 14rem);
+.hero-title {
+    font-family: var(--font-tech);
+    font-size: clamp(1.8rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    transform-style: preserve-3d;
+}
+
+.fx-shatter .char {
+    display: inline-block;
+    will-change: transform, opacity;
+    transform-style: preserve-3d;
 }
 
 .hero-subtitle {
@@ -134,6 +145,7 @@ body {
     line-height: 1.7;
     margin-bottom: 2.5rem;
     font-weight: 400;
+    will-change: transform, opacity;
 }
 
 .hero-subtitle b {
@@ -145,6 +157,7 @@ body {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    will-change: transform, opacity;
 }
 
 .btn {
@@ -180,12 +193,10 @@ body {
     transform: translateY(-3px);
 }
 
-/* KONTAKT Z INTERAKTYWNYMI EFEKTAMI WOW */
+/* Sekcja Kontakt */
 .contact-section {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 100px 1.5rem;
     position: relative;
     z-index: 10;
@@ -215,7 +226,6 @@ body {
     transition: border-color 0.4s, box-shadow 0.4s;
 }
 
-/* Interaktywne neonowe obramowanie */
 .card-glow-line {
     position: absolute;
     top: 0;
@@ -313,7 +323,6 @@ body {
     left: 0;
 }
 
-/*WOW Przycisk wysyłania z poświatą magnetyczną */
 .submit-btn-glow {
     width: 100%;
     border: none;
@@ -337,15 +346,9 @@ body {
     left: 100%;
 }
 
-.submit-btn-glow:active {
-    transform: scale(0.98);
-}
-
-/* Mobile RWD */
 @media (max-width: 768px) {
     .nav-links { display: none; }
-    .hero { padding: 0 5vw; text-align: center; }
-    .hero-container { padding-top: 80px; }
+    .hero { padding-top: 90px; padding-bottom: 40px; text-align: center; }
     .hero-cta { flex-direction: column; gap: 0.8rem; }
     .btn { width: 100%; }
     .contact-card { padding: 3rem 1.5rem; }
