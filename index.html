@@ -3,103 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>DevVibe Labs — Tworzenie Stron WWW & Aplikacji Android | Freelancer</title>
-    <meta name="description" content="Personalizowane strony internetowe, landing page oraz proste aplikacje Android dla Twojego biznesu. Profesjonalne pozycjonowanie SEO, integracje i nowoczesny design.">
-    <meta name="keywords" content="tworzenie stron www, aplikacje android, freelancer, landing page, strony internetowe, pozycjonowanie seo, strony na zamówienie, devvibe labs">
-    
+    <title>DevCore - Personalizowane Strony i Aplikacje Android</title>
     <link rel="stylesheet" href="style.css">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
-    <canvas id="webgl-canvas"></canvas>
-    <div class="cyber-grid"></div>
+    <div class="bg-glow"></div>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">⚡ DEV<span class="gradient-text">VIBE</span> LABS</a>
-            <div class="nav-links">
-                <a href="#strony">Strony WWW</a>
-                <a href="#aplikacje">Aplikacje Android</a>
-                <a href="#o-mnie">O mnie</a>
-                <a href="#kontakt" class="nav-btn">Darmowa Wycena</a>
-            </div>
-        </div>
-    </nav>
-
-    <section id="strony" class="hero particle-section">
-        <div class="hero-container">
-            <div class="hero-content morph-target">
-                <h1 class="hero-title fx-shatter">Budowa stron WWW<br><span class="gradient-text text-glow">Dlaczego warto?</span></h1>
-                <p class="hero-subtitle">
-                    W dzisiejszych czasach Twoja strona to najważniejszy sprzedawca. Dobrze wypozycjonowana witryna (SEO) sprawia, że klienci sami Cię znajdują w Google, co bezpośrednio przekłada się na realny zysk. 
-                    <br><br>
-                    Projektuję <b>personalizowane strony www idealnie dostosowane do specyfiki Twojego biznesu</b> – od prostych, eleganckich wizytówek i landing page'y, po rozbudowane serwisy. Potrzebujesz systemu rezerwacji online, integracji z kalendarzem lub zewnętrznymi narzędziami? Żaden problem. Wszystko połączę w jedną, spójną całość.
-                </p>
-                <div class="hero-cta">
-                    <a href="#kontakt" class="btn btn-primary">Zbuduj stronę ze mną</a>
-                    <a href="#aplikacje" class="btn btn-secondary">Zobacz aplikacje</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="aplikacje" class="hero particle-section">
-        <div class="hero-container">
-            <div class="hero-content morph-target">
-                <h2 class="hero-title fx-shatter">Budowa dedykowanych<br><span class="gradient-text text-glow">Aplikacji Android</span></h2>
-                <p class="hero-subtitle">
-                    Szukasz sposobu na ułatwienie codziennej pracy w firmie lub chcesz wejść na nowy poziom marketingu? Tworzę <b>proste, niezwykle przydatne aplikacje mobilne</b>, które ułatwiają życie Twoim klientom i Tobie.
-                    <br><br>
-                    Mogą to być aplikacje narzędziowe działające na co dzień, systemy z inteligentnymi powiadomieniami PUSH przypominającymi o marce, programy lojalnościowe lub aplikacje wspierające procesy sprzedażowe. Ogranicza nas tylko wyobraźnia – zamienię Twój pomysł w gotową do pobrania aplikację na telefon.
-                </p>
-                <div class="hero-cta">
-                    <a href="#kontakt" class="btn btn-primary">Zaprojektuj aplikację</a>
-                    <a href="#o-mnie" class="btn btn-secondary">Poznaj mnie lepiej</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="o-mnie" class="hero particle-section">
-        <div class="hero-container">
-            <div class="hero-content morph-target">
-                <h2 class="hero-title fx-shatter">Kim jestem?<br><span class="gradient-text text-glow">Programista z Pasji</span></h2>
-                <p class="hero-subtitle">
-                    Działam jako <b>freelancer</b>, a kodowanie stron oraz aplikacji mobilnych to moja wieloletnia, hobbistyczna pasja. Co to oznacza dla Ciebie? Brak korporacyjnego bełkotu, elastyczność oraz pełne zaangażowanie w Twój projekt.
-                    <br><br>
-                    Moim największym atutem jest umiejętność <b>dokładnego przeniesienia wizji klienta bezpośrednio na ekran komputera lub telefonu</b>. Nie musisz znać się na technologii – wysłucham Twoich potrzeb, przeanalizuję Twój biznes i rzetelnie doradzę najlepsze, najbardziej opłacalne rozwiązania techniczne. Twoje zadowolenie to mój priorytet.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section id="kontakt" class="contact-section">
-        <div class="contact-card">
-            <h2 class="font-orbitron" style="font-size: 2.2rem; margin-bottom: 1.2rem;">Porozmawiajmy o projekcie</h2>
-            <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Napisz, czego potrzebujesz. Doradztwo i wstępna wycena są całkowicie bezpłatne.</p>
-            
-            <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contact-form-element">
-                <input type="hidden" name="access_key" value="8176e9ae-0eda-4450-a91d-996b0d07e5a8">
-                <input type="checkbox" name="botcheck" style="display: none;">
-
-                <div class="form-group"><input type="text" name="name" placeholder="Twoje Imię" required></div>
-                <div class="form-group"><input type="email" name="email" placeholder="Twój E-mail" required></div>
-                <div class="form-group"><textarea name="message" placeholder="Opisz swój biznes i to, co chcesz stworzyć..." rows="4" required></textarea></div>
+    <div class="container">
+        <div class="card-3d" id="card">
+            <div class="card-content">
+                <div class="logo">⚡ DevCore</div>
+                <h1>Tworzę Przyszłość <br><span class="gradient-text">Web & Android</span></h1>
+                <p>Personalizowane strony www o wysokiej wydajności oraz intuicyjne aplikacje mobilne, które wyróżnią Twój biznes.</p>
                 
-                <div id="form-result" style="margin-top: 10px; font-weight: 600;"></div>
-                <button type="submit" class="btn btn-primary">Wyślij darmowe zapytanie</button>
-            </form>
+                <div class="services">
+                    <div class="badge">🌐 Strony WWW</div>
+                    <div class="badge">🤖 Aplikacje Android</div>
+                    <div class="badge">✨ Efekty 3D</div>
+                </div>
+
+                <a href="#kontakt" class="btn-primary">Rozpocznij Projekt</a>
+            </div>
+            <div class="shine"></div>
         </div>
-    </section>
+    </div>
 
     <script src="script.js"></script>
 </body>
