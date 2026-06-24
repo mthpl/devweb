@@ -67,7 +67,7 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. ZMODYFIKOWANY PARSER TEKSTU (SZANUJE I PRZENOSI TAGI <BR> DLA IDEALNEGO UKŁADU) ---
+// --- 2. PARSER TEKSTU (SZANUJE TAGI <BR> I PROSTUJE STRUKTURĘ) ---
 document.querySelectorAll('.fx-shatter').forEach(title => {
     const fragment = document.createDocumentFragment();
 
@@ -85,7 +85,6 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
                     }
                 });
             } else if (child.nodeType === Node.ELEMENT_NODE) {
-                // JEŚLI TRAFIMY NA <BR>, PRZENOSIMY GO BEZPOŚREDNIO DO STRUKTURY ZNAKÓW
                 if (child.tagName.toLowerCase() === 'br') {
                     fragment.appendChild(document.createElement('br'));
                 } else {
@@ -102,7 +101,7 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
 });
 
 
-// --- 3. SPÓJNY SYSTEM SCALANIA I WYJŚCIA TEKSTU DLA WSZYSTKICH SEKCOJI ---
+// --- 3. IDEALNIE UPROSZCZONY SYSTEM SCALANIA (DOKŁADNIE JAK W "KIM JESTEM") ---
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section, index) => {
@@ -110,7 +109,7 @@ particleSections.forEach((section, index) => {
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    // Reset – wymuszenie pełnej ostrości dla całego nagłówka od startu
+    // Wymuszenie czystego stanu końcowego – po skończeniu scrolla wszystko ma być idealnie ostre i na swoim miejscu
     gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
     if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
     if(cta) gsap.set(cta, { opacity: 1, y: 0 });
@@ -126,54 +125,30 @@ particleSections.forEach((section, index) => {
         }
     });
 
-    // GENEROWANIE POZYCJI WYBUCHU ZNAKÓW
-    const animData = Array.from(chars).map(() => ({
-        x: isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7,
-        y: isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7,
-        z: isMobile ? 0 : (Math.random() - 0.5) * 500,
-        rot: isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180
-    }));
+    // EFEKT DOLOTU DLA KAŻDEJ SEKCOJI: Wszystkie litery płynnie scalają się z kosmosu
+    chars.forEach((char) => {
+        const startX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
+        const startY = isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7;
+        const startZ = isMobile ? 0 : (Math.random() - 0.5) * 500;
+        const startRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180;
 
-    // ETAP ENTRANCE (WEJŚCIE): Jeśli to nie pierwsza sekcja, litery wlatują z kosmosu
-    if (index > 0) {
-        chars.forEach((char, i) => {
-            masterTimeline.from(char, {
-                x: animData[i].x,
-                y: animData[i].y,
-                z: animData[i].z,
-                rotationX: animData[i].rot,
-                rotationY: animData[i].rot,
-                scale: 0,
-                opacity: 0,
-                duration: 0.5
-            }, 0);
-        });
+        masterTimeline.from(char, {
+            x: startX,
+            y: startY,
+            z: startZ,
+            rotationX: startRot,
+            rotationY: startRot,
+            scale: 0,
+            opacity: 0,
+            duration: 1
+        }, 0);
+    });
 
-        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, duration: 0.4 }, 0.1);
-        if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, duration: 0.3 }, 0.2);
-    }
+    if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, duration: 0.8 }, 0.2);
+    if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, duration: 0.6 }, 0.4);
 
-    // Punkt kulminacyjny sekcji (tekst idealnie ułożony, ostry)
+    // Rezerwujemy czas na pozostanie tekstu na ekranie
     masterTimeline.to({}, { duration: 0.4 });
-
-    // ETAP EXIT (WYJŚCIE): DODANO ROZPAD DLA PIERWSZEJ I DRUGIEJ SEKCJI PRZY SCROLLU W DÓŁ
-    if (index < particleSections.length - 1) {
-        chars.forEach((char, i) => {
-            masterTimeline.to(char, {
-                x: animData[i].x,
-                y: animData[i].y,
-                z: animData[i].z,
-                rotationX: animData[i].rot,
-                rotationY: animData[i].rot,
-                scale: 0,
-                opacity: 0,
-                duration: 0.5
-            }, '+=0');
-        });
-
-        if(subtitle) masterTimeline.to(subtitle, { opacity: 0, y: -40, duration: 0.4 }, '-=0.5');
-        if(cta) masterTimeline.to(cta, { opacity: 0, y: -20, duration: 0.3 }, '-=0.5');
-    }
 });
 
 
