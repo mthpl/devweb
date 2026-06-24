@@ -1,7 +1,6 @@
 :root {
     --bg-dark: #020205;
-    --card-bg: rgba(255, 255, 255, 0.02);
-    --card-border: rgba(255, 255, 255, 0.08);
+    --card-border: rgba(255, 255, 255, 0.07);
     --primary: #00fff2;
     --secondary: #9333ea;
     --text-main: #f3f4f6;
@@ -60,15 +59,15 @@ body {
     text-shadow: 0 0 40px rgba(0, 255, 242, 0.5);
 }
 
-/* Nawigacja z efektem Glassmorphism */
+/* Nawigacja */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 100;
-    background: rgba(2, 2, 5, 0.3);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(2, 2, 5, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--card-border);
 }
 
@@ -108,7 +107,7 @@ body {
     box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
 }
 
-/* Sekcje Treści */
+/* Sekcje Hero z czystym tekstem */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -124,19 +123,7 @@ body {
     width: 100%;
 }
 
-/* DEFINICJA EFEKTU GLASS (GLASSMORPHISM) */
-.glass-panel {
-    background: rgba(10, 10, 25, 0.35); /* Ultralekkie, ciemne podłoże */
-    border: 1px solid var(--card-border); /* Delikatna szklana krawędź */
-    border-radius: 32px;
-    padding: 3.5rem 3rem;
-    backdrop-filter: blur(25px); /* Potężne rozmycie tła za szkłem */
-    -webkit-backdrop-filter: blur(25px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 
-                inset 0 1px 1px rgba(255, 255, 255, 0.05); /* Wewnętrzny połysk na krawędzi */
-}
-
-/* Kontener tekstu poddawany atomizacji */
+/* Kontener poddawany atomizacji */
 .morph-target {
     max-width: 850px;
     will-change: transform, filter, opacity, letter-spacing;
@@ -231,13 +218,12 @@ body {
 .form-group input, .form-group textarea {
     width: 100%;
     padding: 1.2rem 1.6rem;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(5, 5, 15, 0.5);
     border: 1px solid var(--card-border);
     border-radius: 14px;
     color: #fff;
     font-size: 1rem;
     font-family: var(--font-body);
-    backdrop-filter: blur(5px);
 }
 
 .form-group input:focus, .form-group textarea:focus {
@@ -248,7 +234,6 @@ body {
 
 @media (max-width: 968px) {
     .nav-links { display: none; }
-    .hero { padding-top: 100px; padding-bottom: 60px; }
+    .hero { padding-top: 100px; padding-bottom: 60px; text-align: center; }
     .hero-cta { justify-content: center; }
-    .glass-panel { padding: 2.5rem 1.8rem; border-radius: 24px; }
 }
