@@ -67,7 +67,7 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. PARSER TEKSTU (SZANUJE TAGI <BR> I PROSTUJE STRUKTURĘ) ---
+// --- 2. PARSER TEKSTU (SZANUJE TAGI <BR> I PROSTUJE STRUKTURĘ DLA OSTROŚCI) ---
 document.querySelectorAll('.fx-shatter').forEach(title => {
     const fragment = document.createDocumentFragment();
 
@@ -101,7 +101,7 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
 });
 
 
-// --- 3. IDEALNIE UPROSZCZONY SYSTEM SCALANIA (DOKŁADNIE JAK W "KIM JESTEM") ---
+// --- 3. DWUKIERUNKOWA OŚ CZASU (ZUNIFIKOWANE WEJŚCIE I ROZPAD) ---
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section, index) => {
@@ -109,7 +109,7 @@ particleSections.forEach((section, index) => {
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    // Wymuszenie czystego stanu końcowego – po skończeniu scrolla wszystko ma być idealnie ostre i na swoim miejscu
+    // Ustawienie domyślnego, krystalicznie ostrego stanu początkowego liter
     gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
     if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
     if(cta) gsap.set(cta, { opacity: 1, y: 0 });
@@ -118,37 +118,61 @@ particleSections.forEach((section, index) => {
         scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '+=100%',
+            end: '+=150%', // Wydłużony czas przewijania, aby zmieścić rozpad
             scrub: 1,
             pin: true,
             anticipatePin: 1
         }
     });
 
-    // EFEKT DOLOTU DLA KAŻDEJ SEKCOJI: Wszystkie litery płynnie scalają się z kosmosu
-    chars.forEach((char) => {
-        const startX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
-        const startY = isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7;
-        const startZ = isMobile ? 0 : (Math.random() - 0.5) * 500;
-        const startRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180;
+    // FAZA 1: WEJŚCIE (SCALANIE) — litery wlatują z kosmosu (dla sekcji 2 i 3)
+    if (index > 0) {
+        chars.forEach((char) => {
+            const inX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
+            const inY = isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7;
+            const inZ = isMobile ? 0 : (Math.random() - 0.5) * 500;
+            const inRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180;
 
-        masterTimeline.from(char, {
-            x: startX,
-            y: startY,
-            z: startZ,
-            rotationX: startRot,
-            rotationY: startRot,
+            masterTimeline.from(char, {
+                x: inX,
+                y: inY,
+                z: inZ,
+                rotationX: inRot,
+                rotationY: inRot,
+                scale: 0,
+                opacity: 0,
+                duration: 1
+            }, 0);
+        });
+
+        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 40, duration: 0.8 }, 0.2);
+        if(cta) masterTimeline.from(cta, { opacity: 0, y: 40, duration: 0.6 }, 0.4);
+    }
+
+    // FAZA 2: PUNKT KULMINACYJNY — stabilne okno czasowe, kiedy tekst stoi złączony na ekranie
+    masterTimeline.to({}, { duration: 0.5 });
+
+    // FAZA 3: WYJŚCIE (ROZPROSZENIE) — litery autentycznie eksplodują i rozlatują się w nicość
+    chars.forEach((char) => {
+        const outX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
+        const outY = isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7;
+        const outZ = isMobile ? 0 : (Math.random() - 0.5) * 500;
+        const outRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180;
+
+        masterTimeline.to(char, {
+            x: outX,
+            y: outY,
+            z: outZ,
+            rotationX: outRot,
+            rotationY: outRot,
             scale: 0,
             opacity: 0,
             duration: 1
-        }, 0);
+        }, '+=0'); // Odpalenie sekwencji wybuchu od razu po oknie stabilizacji
     });
 
-    if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, duration: 0.8 }, 0.2);
-    if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, duration: 0.6 }, 0.4);
-
-    // Rezerwujemy czas na pozostanie tekstu na ekranie
-    masterTimeline.to({}, { duration: 0.4 });
+    if(subtitle) masterTimeline.to(subtitle, { opacity: 0, y: -40, duration: 0.8 }, '-=1');
+    if(cta) masterTimeline.to(cta, { opacity: 0, y: -20, duration: 0.6 }, '-=1');
 });
 
 
