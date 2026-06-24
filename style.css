@@ -29,7 +29,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
 }
 
@@ -39,7 +39,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -2;
+    z-index: -1;
     background-image: linear-gradient(rgba(0, 255, 242, 0.01) 1px, transparent 1px),
                       linear-gradient(90deg, rgba(0, 255, 242, 0.01) 1px, transparent 1px);
     background-size: 80px 80px;
@@ -51,6 +51,11 @@ body {
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.text-glow {
+    text-shadow: 0 0 40px rgba(0, 255, 242, 0.5);
 }
 
 /* Nawigacja */
@@ -90,35 +95,65 @@ body {
     font-weight: 600;
 }
 
+.nav-links a:hover { color: var(--primary); }
+
 .nav-links .nav-btn {
     border: 1px solid var(--primary);
     padding: 0.6rem 1.4rem;
     border-radius: 50px;
     background: rgba(0, 255, 242, 0.03);
+    box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
 }
 
 /* Sekcje */
 .hero {
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
     display: flex;
     align-items: center;
+    padding: 140px 2rem;
     position: relative;
-    padding: 0 10vw;
+    z-index: 2;
 }
 
 .hero-container {
     max-width: 1200px;
+    margin: 0 auto;
     width: 100%;
 }
 
-.ui-target {
+.morph-target {
     max-width: 850px;
 }
 
-/* Rezerwowane wolne miejsce na nagłówki z cząsteczek */
-.spacer-for-3d-text {
-    height: clamp(8rem, 20vh, 14rem);
+.hero-title {
+    font-family: var(--font-tech);
+    font-size: clamp(2.1rem, 5.5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 2.5rem;
+    color: #ffffff;
+}
+
+/* STYLIZACJA MATRYCOWYCH PIKSELO-LITER */
+.fx-matrix .matrix-char {
+    display: inline-block;
+    position: relative;
+    will-change: transform, opacity, filter;
+    transform-style: preserve-3d;
+}
+
+/* Pseudo-element generujący malutki kod binarny udający piksel */
+.fx-matrix .matrix-char::after {
+    content: attr(data-char);
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 5px; /* Super mały rozmiar, dający efekt pikseli z bliska */
+    font-family: monospace;
+    color: var(--primary);
+    opacity: 0;
+    filter: blur(2px);
+    will-change: transform, opacity;
 }
 
 .hero-subtitle {
@@ -172,18 +207,16 @@ body {
 
 /* Kontakt */
 .contact-section {
-    min-height: 100vh;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 140px 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 120px 2rem;
+    position: relative;
+    z-index: 10;
 }
 
 .contact-card {
-    width: 100%;
     max-width: 650px;
+    margin: 0 auto;
     text-align: center;
     background: rgba(5, 5, 15, 0.6);
     padding: 4rem 3rem;
