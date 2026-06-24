@@ -95,14 +95,11 @@ body {
     font-weight: 600;
 }
 
-.nav-links a:hover { color: var(--primary); }
-
 .nav-links .nav-btn {
     border: 1px solid var(--primary);
     padding: 0.6rem 1.4rem;
     border-radius: 50px;
     background: rgba(0, 255, 242, 0.03);
-    box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
 }
 
 /* Sekcje */
@@ -123,6 +120,7 @@ body {
 
 .morph-target {
     max-width: 850px;
+    perspective: 1000px;
 }
 
 .hero-title {
@@ -132,28 +130,13 @@ body {
     line-height: 1.15;
     margin-bottom: 2.5rem;
     color: #ffffff;
-}
-
-/* STYLIZACJA MATRYCOWYCH PIKSELO-LITER */
-.fx-matrix .matrix-char {
-    display: inline-block;
-    position: relative;
-    will-change: transform, opacity, filter;
     transform-style: preserve-3d;
 }
 
-/* Pseudo-element generujący malutki kod binarny udający piksel */
-.fx-matrix .matrix-char::after {
-    content: attr(data-char);
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 5px; /* Super mały rozmiar, dający efekt pikseli z bliska */
-    font-family: monospace;
-    color: var(--primary);
-    opacity: 0;
-    filter: blur(2px);
-    will-change: transform, opacity;
+.fx-shatter .char {
+    display: inline-block;
+    will-change: transform, opacity, filter;
+    transform-style: preserve-3d;
 }
 
 .hero-subtitle {
@@ -162,6 +145,7 @@ body {
     line-height: 1.8;
     margin-bottom: 3rem;
     font-weight: 400;
+    will-change: transform, opacity, filter;
 }
 
 .hero-subtitle b {
@@ -173,6 +157,7 @@ body {
     display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
+    will-change: transform, opacity, filter;
 }
 
 .btn {
