@@ -82,7 +82,7 @@
                 <article class="hero-content morph-target">
                     <h2 class="hero-title fx-shatter">Budowa dedykowanych<br><span class="gradient-text text-glow">Aplikacji Android</span></h2>
                     <p class="hero-subtitle">
-                        Szukasz sposobu na ułatwienie codziennej pracy w firmie lub chcesz wejść na nowy poziom marketingu bezpośredniego? Tworzę <b>proste, niezwykle przydatne aplikacje mobilne</b>, które ułatwiają życie Twoim klientom i Tobie.
+                        Szukasz sposobu na ułatwienie codziennej pracy w firmie lub chcesz wejść na nowy poziom marketingowego zaangażowania? Tworzę <b>proste, niezwykle przydatne aplikacje mobilne</b>, które ułatwiają życie Twoim klientom i Tobie.
                         <br><br>
                         Mogą to być natywne aplikacje narzędziowe wspierające biznes na co dzień, zaawansowane systemy z inteligentnymi powiadomieniami PUSH przypominającymi o Twojej marce, programy lojalnościowe podnoszące sprzedaż lub aplikacje dedykowane procesom logistycznym. Ogranicza nas tylko wyobraźnia – zamienię Twój unikalny pomysł w gotową do pobrania aplikację na telefon komórkowy.
                     </p>
@@ -108,22 +108,36 @@
         </section>
 
         <section id="kontakt" class="contact-section">
-            <header class="contact-card">
-                <h2 class="text-glow" style="font-size: 2.2rem; margin-bottom: 1.2rem; font-family: 'Orbitron', sans-serif;">Porozmawiajmy o projekcie</h2>
-                <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Napisz, czego potrzebujesz. Profesjonalne doradztwo i wstępna wycena projektu są całkowicie bezpłatne.</p>
+            <div class="contact-card interactive-glow-card">
+                <h2 class="text-glow font-tech-heading">Porozmawiajmy o projekcie</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-size: 0.95rem;">Napisz, czego potrzebujesz. Profesjonalne doradztwo i wstępna wycena projektu są całkowicie bezpłatne.</p>
                 
                 <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contact-form-element" aria-label="Formularz wyceny strony www">
                     <input type="hidden" name="access_key" value="8176e9ae-0eda-4450-a91d-996b0d07e5a8">
                     <input type="checkbox" name="botcheck" style="display: none;">
 
-                    <div class="form-group"><input type="text" name="name" placeholder="Twoje Imię" aria-label="Twoje Imię" required></div>
-                    <div class="form-group"><input type="email" name="email" placeholder="Twój E-mail" aria-label="Twój E-mail" required></div>
-                    <div class="form-group"><textarea name="message" placeholder="Opisz swój biznes i to, co chcesz stworzyć..." aria-label="Treść wiadomości" rows="4" required></textarea></div>
+                    <div class="form-group custom-input-group">
+                        <input type="text" name="name" id="form-name" required placeholder=" ">
+                        <label for="form-name">Twoje Imię</label>
+                        <div class="input-bar"></div>
+                    </div>
+                    
+                    <div class="form-group custom-input-group">
+                        <input type="email" name="email" id="form-email" required placeholder=" ">
+                        <label for="form-email">Twój E-mail</label>
+                        <div class="input-bar"></div>
+                    </div>
+                    
+                    <div class="form-group custom-input-group">
+                        <textarea name="message" id="form-msg" rows="4" required placeholder=" "></textarea>
+                        <label for="form-msg">Opisz swój biznes i to, co chcesz stworzyć...</label>
+                        <div class="input-bar"></div>
+                    </div>
                     
                     <div id="form-result" style="margin-top: 10px; font-weight: 600;"></div>
-                    <button type="submit" class="btn btn-primary" aria-label="Wyślij formularz wyceny">Wyślij darmowe zapytanie</button>
+                    <button type="submit" class="btn btn-primary submit-btn-glow" aria-label="Wyślij formularz wyceny">Wyślij darmowe zapytanie</button>
                 </form>
-            </header>
+            </div>
         </section>
     </main>
     
