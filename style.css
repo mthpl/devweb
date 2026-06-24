@@ -133,6 +133,7 @@ body {
     transform-style: preserve-3d;
 }
 
+/* CAŁKOWITE USUNIĘCIE FILTRU BLUR Z CSS NA START */
 .fx-shatter .char {
     display: inline-block;
     will-change: transform, opacity, filter;
