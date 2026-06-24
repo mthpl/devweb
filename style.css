@@ -133,7 +133,6 @@ body {
     transform-style: preserve-3d;
 }
 
-/* KOMPLETNE USUNIĘCIE FILTRA BLUR DLA CHRONIENIA GRADIENTÓW */
 .fx-shatter .char {
     display: inline-block;
     will-change: transform, opacity;
@@ -194,7 +193,7 @@ body {
     transform: translateY(-3px);
 }
 
-/* INTERAKTYWNA SEKCJA KONTAKTOWA Z CHROMATYCZNYM PODŚWIETLENIEM */
+/* INTERAKTYWNA SEKCJA KONTAKTOWA */
 .contact-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -207,6 +206,8 @@ body {
     font-family: var(--font-tech);
     font-size: 2.2rem;
     margin-bottom: 1.2rem;
+    position: relative;
+    z-index: 2;
 }
 
 .contact-card {
@@ -214,20 +215,44 @@ body {
     max-width: 650px;
     margin: 0 auto;
     text-align: center;
-    background: rgba(4, 4, 12, 0.6);
+    background: rgba(4, 4, 12, 0.75);
     padding: 4rem 3rem;
     border-radius: 28px;
     border: 1px solid var(--card-border);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     position: relative;
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    overflow: hidden;
+    transition: border-color 0.4s, box-shadow 0.4s;
 }
 
-/* Stan podświetlenia całej karty, gdy użytkownik pisze wiadomość */
+/* INTERAKTYWNA LINIA NEONOWA NA KRAWIĘDZIACH KARTY */
+.card-glow-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: 28px;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, var(--primary), var(--secondary)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-combine: xor;
+    mask-combine: exclude;
+    opacity: 0.15;
+    transition: opacity 0.4s, filter 0.4s;
+}
+
+/* Karta aktywuje potężną łunę i blask neonów, gdy użytkownik klika pola */
 .contact-card.form-active {
-    border-color: rgba(0, 255, 242, 0.3);
-    box-shadow: 0 0 50px rgba(0, 255, 242, 0.1), inset 0 0 20px rgba(147, 51, 234, 0.1);
+    border-color: rgba(0, 255, 242, 0.35);
+    box-shadow: 0 0 60px rgba(0, 255, 242, 0.12), inset 0 0 30px rgba(147, 51, 234, 0.08);
+}
+
+.contact-card.form-active .card-glow-line {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 8px var(--primary));
 }
 
 .contact-form {
@@ -235,9 +260,10 @@ body {
     flex-direction: column;
     gap: 2rem;
     margin-top: 2.5rem;
+    position: relative;
+    z-index: 2;
 }
 
-/* NOWOCZESNE GRUPY LINKOWANYCH INPUTÓW Z UNOSZONĄ ETYKIETĄ */
 .custom-input-group {
     position: relative;
     width: 100%;
@@ -246,21 +272,20 @@ body {
 .custom-input-group input, .custom-input-group textarea {
     width: 100%;
     padding: 1.2rem 1rem 0.6rem 1rem;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: #fff;
     font-size: 1rem;
     font-family: var(--font-body);
     outline: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 .custom-input-group textarea {
     resize: none;
 }
 
-/* Etykieta (placeholder) jako żywy element interfejsu */
 .custom-input-group label {
     position: absolute;
     left: 1rem;
@@ -272,7 +297,6 @@ body {
     transform-origin: left top;
 }
 
-/* Dynamiczny pasek podświetlenia (neon bar) */
 .input-bar {
     position: absolute;
     bottom: 0;
@@ -283,7 +307,6 @@ body {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* EFEKT INTERAKTYWNY: Ruch etykiety w górę i aktywacja neonu */
 .custom-input-group input:focus ~ label,
 .custom-input-group input:not(:placeholder-shown) ~ label,
 .custom-input-group textarea:focus ~ label,
@@ -293,8 +316,8 @@ body {
 }
 
 .custom-input-group input:focus, .custom-input-group textarea:focus {
-    border-color: rgba(0, 255, 242, 0.25);
-    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(0, 255, 242, 0.3);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 .custom-input-group input:focus ~ .input-bar, .custom-input-group textarea:focus ~ .input-bar {
@@ -302,12 +325,28 @@ body {
     left: 0;
 }
 
-/* Pulsacja przycisku Submit */
 .submit-btn-glow {
     width: 100%;
     border: none;
     margin-top: 0.5rem;
     position: relative;
+    overflow: hidden;
+}
+
+/* WOW Efekt podświetlenia po najechaniu na przycisk wyślij */
+.submit-btn-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transition: left 0.6s ease;
+}
+
+.submit-btn-glow:hover::before {
+    left: 100%;
 }
 
 .submit-btn-glow:active {
