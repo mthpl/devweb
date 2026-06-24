@@ -2,7 +2,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const isMobile = window.innerWidth <= 768;
 
-// --- 1. PRZYWRÓCONE ORYGINALNE AKTYWNE TŁO THREE.JS ---
+// --- 1. THREE.JS ANIMATED BACKGROUND ---
 const canvas = document.querySelector('#webgl-canvas');
 const scene = new THREE.Scene();
 
@@ -14,10 +14,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const particlesGeometry = new THREE.BufferGeometry();
-const count = isMobile ? 800 : 1800; 
+const count = isMobile ? 800 : 1800;
 const positions = new Float32Array(count * 3);
 
-for(let i = 0; i < count * 3; i++) {
+for (let i = 0; i < count * 3; i++) {
     positions[i] = (Math.random() - 0.5) * 12;
 }
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -41,7 +41,7 @@ document.addEventListener('mousemove', (event) => {
 });
 
 document.addEventListener('touchmove', (event) => {
-    if(event.touches.length > 0) {
+    if (event.touches.length > 0) {
         mouseX = (event.touches[0].clientX / window.innerWidth) - 0.5;
         mouseY = (event.touches[0].clientY / window.innerHeight) - 0.5;
     }
@@ -50,11 +50,9 @@ document.addEventListener('touchmove', (event) => {
 const clock = new THREE.Clock();
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
-    
     particleSystem.rotation.y = elapsedTime * 0.03;
-    particleSystem.rotation.x += ( -mouseY * 0.3 - particleSystem.rotation.x ) * 0.05;
-    particleSystem.rotation.y += ( mouseX * 0.3 - particleSystem.rotation.y ) * 0.05;
-
+    particleSystem.rotation.x += (-mouseY * 0.3 - particleSystem.rotation.x) * 0.05;
+    particleSystem.rotation.y += (mouseX * 0.3 - particleSystem.rotation.y) * 0.05;
     renderer.render(scene, camera);
     window.requestAnimationFrame(tick);
 };
@@ -67,7 +65,7 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. PARSER TEKSTU (SZANUJE TAGI <BR> I DOSKONALE UKŁADA LINIE) ---
+// --- 2. CHAR SPLITTER — respects <br> and nested tags ---
 document.querySelectorAll('.fx-shatter').forEach(title => {
     const fragment = document.createDocumentFragment();
 
@@ -76,10 +74,10 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
             if (child.nodeType === Node.TEXT_NODE) {
                 child.textContent.split('').forEach(char => {
                     if (char === ' ') {
-                        fragment.appendChild(document.createTextNode(' '));
+                        fragment.appendChild(document.createTextNode('\u00A0'));
                     } else {
                         const span = document.createElement('span');
-                        span.className = `char ${inheritedClasses}`.trim(); 
+                        span.className = ('char ' + inheritedClasses).trim();
                         span.textContent = char;
                         fragment.appendChild(span);
                     }
@@ -88,97 +86,169 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
                 if (child.tagName.toLowerCase() === 'br') {
                     fragment.appendChild(document.createElement('br'));
                 } else {
-                    const currentClasses = child.className;
-                    extractChars(child, currentClasses);
+                    extractChars(child, child.className || '');
                 }
             }
         });
     };
 
     extractChars(title);
-    title.innerHTML = ''; 
-    title.appendChild(fragment); 
+    title.innerHTML = '';
+    title.appendChild(fragment);
 });
 
 
-// --- 3. DWUKIERUNKOWA SEKWENCJA ROZPADU I SCALANIA W HTML (GSAP) ---
+// --- 3. SCROLL-PINNED SHATTER / ASSEMBLE ANIMATIONS ---
 const particleSections = document.querySelectorAll('.particle-section');
+const VW = window.innerWidth;
+const VH = window.innerHeight;
 
 particleSections.forEach((section, index) => {
     const chars = section.querySelectorAll('.char');
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    // Resetowanie stylów startowych
-    gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
-    if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
-    if(cta) gsap.set(cta, { opacity: 1, y: 0 });
+    // === ASSEMBLE animation (chars fly in from random space) ===
+    // Defined per-char so values are stable across scrub direction
+    const charData = Array.from(chars).map(() => ({
+        startX: (Math.random() - 0.5) * (isMobile ? 200 : VW * 1.2),
+        startY: (Math.random() - 0.5) * (isMobile ? 160 : VH * 1.0),
+        startZ: isMobile ? 0 : (Math.random() - 0.5) * 500,
+        startRot: (Math.random() - 0.5) * 270
+    }));
 
-    const masterTimeline = gsap.timeline({
+    const endCharData = Array.from(chars).map(() => ({
+        endX: (Math.random() - 0.5) * (isMobile ? 250 : VW * 1.4),
+        endY: (Math.random() - 0.5) * (isMobile ? 200 : VH * 1.2),
+        endZ: isMobile ? 0 : (Math.random() - 0.5) * 700,
+        endRot: (Math.random() - 0.5) * 360
+    }));
+
+    // Set all chars visible and at natural position initially
+    gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
+    if (subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
+    if (cta) gsap.set(cta, { opacity: 1, y: 0 });
+
+    const tl = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '+=130%', 
-            scrub: 1,
+            end: '+=160%',
+            scrub: 1.2,
             pin: true,
-            anticipatePin: 1
+            anticipatePin: 1,
+            invalidateOnRefresh: true
         }
     });
 
-    // ETAP 1: POJAWIANIE (SCALANIE) — Dla sekcji 2 i 3 litery zlatują się z kosmosu
+    // == PHASE 1 — ASSEMBLE (only sections 2 and 3) ==
     if (index > 0) {
-        chars.forEach((char) => {
-            const startX = isMobile ? (Math.random() - 0.5) * 100 : (Math.random() - 0.5) * window.innerWidth * 0.8;
-            const startY = isMobile ? (Math.random() - 0.5) * 80 : (Math.random() - 0.6) * window.innerHeight * 0.8;
-            const startZ = isMobile ? 0 : (Math.random() - 0.5) * 400;
-            const startRot = (Math.random() - 0.5) * 180;
-
-            masterTimeline.from(char, {
-                x: startX,
-                y: startY,
-                z: startZ,
-                rotationX: startRot,
-                rotationY: startRot,
-                scale: 0,
-                opacity: 0,
-                duration: 1
-            }, 0);
+        chars.forEach((char, i) => {
+            const d = charData[i];
+            tl.fromTo(char,
+                {
+                    x: d.startX,
+                    y: d.startY,
+                    z: d.startZ,
+                    rotationX: d.startRot,
+                    rotationY: d.startRot,
+                    scale: 0.2,
+                    opacity: 0
+                },
+                {
+                    x: 0, y: 0, z: 0,
+                    rotationX: 0, rotationY: 0,
+                    scale: 1, opacity: 1,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                },
+                0   // all start at the same timeline position → parallel
+            );
         });
 
-        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, duration: 0.8 }, 0.2);
-        if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, duration: 0.6 }, 0.4);
+        if (subtitle) {
+            tl.fromTo(subtitle,
+                { opacity: 0, y: 40 },
+                { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
+                0.1
+            );
+        }
+        if (cta) {
+            tl.fromTo(cta,
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },
+                0.2
+            );
+        }
     }
 
-    // Okno czytelności tekstu na ekranie
-    masterTimeline.to({}, { duration: 0.4 });
+    // == Legibility pause ==
+    tl.to({}, { duration: 0.5 });
 
-    // ETAP 2: ROZPAD (EKSPLOZJA) — Przy skrolowaniu dalej w dół, litery sekcji 1 i 2 rozlatują się i znikają
+    // == PHASE 2 — SHATTER (all sections except the last) ==
     if (index < particleSections.length - 1) {
-        chars.forEach((char) => {
-            const endX = isMobile ? (Math.random() - 0.5) * 150 : (Math.random() - 0.5) * window.innerWidth * 0.9;
-            const endY = isMobile ? (Math.random() - 0.5) * 120 : (Math.random() - 0.6) * window.innerHeight * 0.9;
-            const endZ = isMobile ? 0 : (Math.random() - 0.5) * 600;
-            const endRot = (Math.random() - 0.5) * 360; // Gwałtowniejszy obrót przy wybuchu
-
-            masterTimeline.to(char, {
-                x: endX,
-                y: endY,
-                z: endZ,
-                rotationX: endRot,
-                rotationY: endRot,
+        chars.forEach((char, i) => {
+            const d = endCharData[i];
+            tl.to(char, {
+                x: d.endX,
+                y: d.endY,
+                z: d.endZ,
+                rotationX: d.endRot,
+                rotationY: d.endRot,
                 scale: 0,
                 opacity: 0,
-                duration: 1
-            }, '+=0');
+                duration: 0.5,
+                ease: 'power2.in'
+            }, '>-0.05');   // tiny stagger for wave feel, all relative to last
         });
 
-        if(subtitle) masterTimeline.to(subtitle, { opacity: 0, y: -40, duration: 0.8 }, '-=1');
-        if(cta) masterTimeline.to(cta, { opacity: 0, y: -20, duration: 0.6 }, '-=1');
+        if (subtitle) {
+            tl.to(subtitle, { opacity: 0, y: -50, duration: 0.4, ease: 'power2.in' }, '<');
+        }
+        if (cta) {
+            tl.to(cta, { opacity: 0, y: -30, duration: 0.3, ease: 'power2.in' }, '<');
+        }
     }
 });
 
 
-// --- 4. INTERAKTYWNE WYDARZENIA FORMULARZA ---
+// --- 4. CONTACT CARD ENTRANCE ANIMATION ---
+const contactSection = document.querySelector('.contact-section');
+const contactCard = document.querySelector('.contact-card');
+
+if (contactCard) {
+    gsap.fromTo(contactCard,
+        {
+            opacity: 0,
+            y: 60,
+            scale: 0.94
+        },
+        {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: contactSection,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        }
+    );
+
+    // Glow pulse animation on the border line
+    gsap.to('.card-glow-line', {
+        opacity: 0.35,
+        duration: 2.5,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1
+    });
+}
+
+
+// --- 5. FORM INTERACTIVITY ---
 const formCard = document.querySelector('.contact-card');
 const formInputs = document.querySelectorAll('.custom-input-group input, .custom-input-group textarea');
 
@@ -186,25 +256,24 @@ formInputs.forEach(input => {
     input.addEventListener('focus', () => {
         formCard.classList.add('form-active');
     });
-    
     input.addEventListener('blur', () => {
         const anyActive = Array.from(formInputs).some(inp => inp === document.activeElement);
-        if(!anyActive) {
+        if (!anyActive) {
             formCard.classList.remove('form-active');
         }
     });
 });
 
-// Obsługa formularza AJAX
+// AJAX form submit
 const form = document.getElementById('contact-form-element');
 const result = document.getElementById('form-result');
 
-if(form) {
-    form.addEventListener('submit', function(e) {
+if (form) {
+    form.addEventListener('submit', function (e) {
         e.preventDefault();
-        result.style.color = "var(--primary)";
-        result.innerHTML = "Wysyłanie sygnału...";
-        
+        result.style.color = 'var(--primary)';
+        result.innerHTML = 'Wysyłanie sygnału...';
+
         const formData = new FormData(form);
         const object = Object.fromEntries(formData);
         const json = JSON.stringify(object);
@@ -214,21 +283,21 @@ if(form) {
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: json
         })
-        .then(async (response) => {
-            let jsonRes = await response.json();
-            if (response.status == 200) {
-                result.style.color = "#00ff88"; 
-                result.innerHTML = "Wiadomość wysłana pomyślnie! Odezwię się niebawem.";
-                form.reset(); 
-                formCard.classList.remove('form-active');
-            } else {
-                result.style.color = "#ff4444";
-                result.innerHTML = jsonRes.message;
-            }
-        })
-        .catch(error => {
-            result.style.color = "#ff4444";
-            result.innerHTML = "Coś poszło nie tak... Spróbuj ponownie później.";
-        });
+            .then(async (response) => {
+                let jsonRes = await response.json();
+                if (response.status === 200) {
+                    result.style.color = '#00ff88';
+                    result.innerHTML = 'Wiadomość wysłana pomyślnie! Odezwę się niebawem.';
+                    form.reset();
+                    formCard.classList.remove('form-active');
+                } else {
+                    result.style.color = '#ff4444';
+                    result.innerHTML = jsonRes.message;
+                }
+            })
+            .catch(() => {
+                result.style.color = '#ff4444';
+                result.innerHTML = 'Coś poszło nie tak... Spróbuj ponownie później.';
+            });
     });
 }
