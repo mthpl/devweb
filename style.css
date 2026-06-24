@@ -1,7 +1,7 @@
 :root {
     --bg-dark: #020205;
-    --card-bg: rgba(5, 5, 15, 0.45);
-    --card-border: rgba(255, 255, 255, 0.07);
+    --card-bg: rgba(255, 255, 255, 0.02);
+    --card-border: rgba(255, 255, 255, 0.08);
     --primary: #00fff2;
     --secondary: #9333ea;
     --text-main: #f3f4f6;
@@ -60,15 +60,15 @@ body {
     text-shadow: 0 0 40px rgba(0, 255, 242, 0.5);
 }
 
-/* Nawigacja */
+/* Nawigacja z efektem Glassmorphism */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 100;
-    background: rgba(2, 2, 5, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(2, 2, 5, 0.3);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--card-border);
 }
 
@@ -113,7 +113,7 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 120px 2rem;
+    padding: 140px 2rem;
     position: relative;
     z-index: 2;
 }
@@ -124,13 +124,28 @@ body {
     width: 100%;
 }
 
-.hero-content {
+/* DEFINICJA EFEKTU GLASS (GLASSMORPHISM) */
+.glass-panel {
+    background: rgba(10, 10, 25, 0.35); /* Ultralekkie, ciemne podłoże */
+    border: 1px solid var(--card-border); /* Delikatna szklana krawędź */
+    border-radius: 32px;
+    padding: 3.5rem 3rem;
+    backdrop-filter: blur(25px); /* Potężne rozmycie tła za szkłem */
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.05); /* Wewnętrzny połysk na krawędzi */
+}
+
+/* Kontener tekstu poddawany atomizacji */
+.morph-target {
     max-width: 850px;
+    will-change: transform, filter, opacity, letter-spacing;
+    transition: letter-spacing 0.1s ease-out;
 }
 
 .hero-title {
     font-family: var(--font-tech);
-    font-size: clamp(2.3rem, 6vw, 4.2rem);
+    font-size: clamp(2.1rem, 5.5vw, 3.8rem);
     font-weight: 900;
     line-height: 1.15;
     margin-bottom: 2.5rem;
@@ -138,7 +153,7 @@ body {
 
 .hero-subtitle {
     color: var(--text-muted);
-    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.8;
     margin-bottom: 3rem;
     font-weight: 400;
@@ -178,7 +193,6 @@ body {
     background: rgba(255, 255, 255, 0.02);
     color: #fff;
     border: 1px solid var(--card-border);
-    backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
@@ -186,45 +200,19 @@ body {
     transform: translateY(-4px);
 }
 
-/* SEKCJA PRZEJŚCIA EFEKTOWNEGO */
-.transition-container {
-    height: 100vh; /* Pełna wysokość ekranu blokująca widok przy skrollu */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    z-index: 5;
-    background: transparent;
-}
-
-.dissolve-text {
-    font-family: var(--font-tech);
-    font-size: clamp(1.8rem, 5vw, 3rem);
-    color: var(--primary);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    text-shadow: 0 0 30px rgba(0, 255, 242, 0.6);
-    text-align: center;
-    padding: 0 2rem;
-    will-change: transform, filter, opacity;
-}
-
 /* Kontakt */
 .contact-section {
     max-width: 1200px;
     margin: 0 auto;
     padding: 120px 2rem;
+    position: relative;
+    z-index: 10;
 }
 
 .contact-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 36px;
-    padding: 5rem 3rem;
     max-width: 650px;
     margin: 0 auto;
     text-align: center;
-    backdrop-filter: blur(20px);
 }
 
 .contact-card h2 {
@@ -243,12 +231,13 @@ body {
 .form-group input, .form-group textarea {
     width: 100%;
     padding: 1.2rem 1.6rem;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
     border: 1px solid var(--card-border);
     border-radius: 14px;
     color: #fff;
     font-size: 1rem;
     font-family: var(--font-body);
+    backdrop-filter: blur(5px);
 }
 
 .form-group input:focus, .form-group textarea:focus {
@@ -259,6 +248,7 @@ body {
 
 @media (max-width: 968px) {
     .nav-links { display: none; }
-    .hero { text-align: center; padding-top: 100px; padding-bottom: 60px; }
+    .hero { padding-top: 100px; padding-bottom: 60px; }
     .hero-cta { justify-content: center; }
+    .glass-panel { padding: 2.5rem 1.8rem; border-radius: 24px; }
 }
