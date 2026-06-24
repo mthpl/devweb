@@ -67,7 +67,7 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. DEEP PARSER TEKSTU (ZAPEWNIA BEZBŁĘDNE OWIJANIE LITER W SPANACH) ---
+// --- 2. GŁĘBOKI PARSER TEKSTU (IDEALNA OSTROŚĆ LITER) ---
 document.querySelectorAll('.fx-shatter').forEach(title => {
     const processNodes = (node) => {
         const fragment = document.createDocumentFragment();
@@ -99,7 +99,7 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
 });
 
 
-// --- 3. SPÓJNY SYSTEM SCALANIA TEKSTU DLA WSZYSTKICH SEKCOJI (WYMUSZENIE OSTROŚCI) ---
+// --- 3. SPÓJNY SYSTEM SCALANIA TEKSTU BEZ BLURA (ZABEZPIECZENIE GRADIENTÓW) ---
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section, index) => {
@@ -107,10 +107,10 @@ particleSections.forEach((section, index) => {
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    // WYMUSZENIE CAŁKOWITEGO BRAKU BLURA I OPACITY=1 PRZED ANIMACJĄ (NAPRAWA BŁĘDU CHROMIUM)
-    gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, filter: 'blur(0px)' });
-    if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0, filter: 'blur(0px)' });
-    if(cta) gsap.set(cta, { opacity: 1, y: 0, filter: 'blur(0px)' });
+    // USUNIĘTO JAKIKOLWIEK BLUR Z PARAMETRÓW STARTOWYCH I ANIMACJI
+    gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
+    if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
+    if(cta) gsap.set(cta, { opacity: 1, y: 0 });
 
     const masterTimeline = gsap.timeline({
         scrollTrigger: {
@@ -123,13 +123,13 @@ particleSections.forEach((section, index) => {
         }
     });
 
-    // ETAP ENTRANCE (WEJŚCIE): Każda pojedyncza litera, niezależnie od gradientu, płynnie nadlatuje
+    // ETAP ENTRANCE (WEJŚCIE): Skalowanie i wyłanianie z przezroczystości zamiast niszczącego blura
     if (index > 0) {
         chars.forEach((char) => {
             const startX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
             const startY = isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7;
-            const startZ = isMobile ? 0 : (Math.random() - 0.5) * 600;
-            const startRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 270;
+            const startZ = isMobile ? 0 : (Math.random() - 0.5) * 500;
+            const startRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180;
 
             masterTimeline.from(char, {
                 x: startX,
@@ -137,22 +137,41 @@ particleSections.forEach((section, index) => {
                 z: startZ,
                 rotationX: startRot,
                 rotationY: startRot,
+                scale: 0, // Litery rosną z nicości składając się w wyraz
                 opacity: 0,
-                filter: 'blur(10px)', // Blur nakłada się wyłącznie w locie w JS
                 duration: 1
             }, 0);
         });
 
-        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, filter: 'blur(10px)', duration: 0.8 }, 0.2);
-        if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, filter: 'blur(8px)', duration: 0.6 }, 0.4);
+        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, duration: 0.8 }, 0.2);
+        if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, duration: 0.6 }, 0.4);
     }
 
-    // Pełne zatrzymanie i wyczyszczenie jakichkolwiek artefaktów rozmycia na środku sekcji
     masterTimeline.to({}, { duration: 0.4 });
 });
 
 
-// --- 4. OBSŁUGA FORMULARZA KONTAKTOWEGO (AJAX) ---
+// --- 4. ZAAWANSOWANE EFEKTY INTERAKTYWNE DLA FORMULARZA ---
+const formCard = document.querySelector('.contact-card');
+const formInputs = document.querySelectorAll('.custom-input-group input, .custom-input-group textarea');
+
+formInputs.forEach(input => {
+    // Podświetlenie całej karty neonem, gdy użytkownik wejdzie w interakcję z polami
+    input.addEventListener('focus', () => {
+        formCard.classList.add('form-active');
+    });
+    
+    input.addEventListener('blur', () => {
+        // Zdejmij podświetlenie tylko jeśli wszystkie pola są puste i nieaktywne
+        const anyActive = Array.from(formInputs).some(inp => inp === document.activeElement);
+        if(!anyActive) {
+            formCard.classList.remove('form-active');
+        }
+    });
+});
+
+
+// --- 5. OBSŁUGA FORMULARZA KONTAKTOWEGO (AJAX) ---
 const form = document.getElementById('contact-form-element');
 const result = document.getElementById('form-result');
 
@@ -177,6 +196,7 @@ if(form) {
                 result.style.color = "#00ff88"; 
                 result.innerHTML = "Wiadomość wysłana pomyślnie! Odezwię się niebawem.";
                 form.reset(); 
+                formCard.classList.remove('form-active');
             } else {
                 result.style.color = "#ff4444";
                 result.innerHTML = jsonRes.message;
