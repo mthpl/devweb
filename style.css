@@ -133,10 +133,10 @@ body {
     transform-style: preserve-3d;
 }
 
-/* CAŁKOWITE USUNIĘCIE FILTRU BLUR Z CSS NA START */
+/* KOMPLETNE USUNIĘCIE FILTRA BLUR DLA CHRONIENIA GRADIENTÓW */
 .fx-shatter .char {
     display: inline-block;
-    will-change: transform, opacity, filter;
+    will-change: transform, opacity;
     transform-style: preserve-3d;
 }
 
@@ -146,7 +146,7 @@ body {
     line-height: 1.7;
     margin-bottom: 2.5rem;
     font-weight: 400;
-    will-change: transform, opacity, filter;
+    will-change: transform, opacity;
 }
 
 .hero-subtitle b {
@@ -158,7 +158,7 @@ body {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    will-change: transform, opacity, filter;
+    will-change: transform, opacity;
 }
 
 .btn {
@@ -168,12 +168,14 @@ body {
     text-decoration: none;
     transition: all 0.3s ease;
     text-align: center;
+    cursor: pointer;
 }
 
 .btn-primary {
     background: linear-gradient(45deg, var(--primary), var(--secondary)) !important;
     color: #000000 !important;
     box-shadow: 0 0 25px rgba(0, 255, 242, 0.25);
+    border: none;
 }
 
 .btn-primary:hover {
@@ -192,7 +194,7 @@ body {
     transform: translateY(-3px);
 }
 
-/* Kontakt */
+/* INTERAKTYWNA SEKCJA KONTAKTOWA Z CHROMATYCZNYM PODŚWIETLENIEM */
 .contact-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -201,57 +203,121 @@ body {
     z-index: 10;
 }
 
+.font-tech-heading {
+    font-family: var(--font-tech);
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
+}
+
 .contact-card {
+    width: 100%;
     max-width: 650px;
     margin: 0 auto;
     text-align: center;
-    background: rgba(5, 5, 15, 0.6);
-    padding: 3.5rem 2rem;
-    border-radius: 24px;
+    background: rgba(4, 4, 12, 0.6);
+    padding: 4rem 3rem;
+    border-radius: 28px;
     border: 1px solid var(--card-border);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    position: relative;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Stan podświetlenia całej karty, gdy użytkownik pisze wiadomość */
+.contact-card.form-active {
+    border-color: rgba(0, 255, 242, 0.3);
+    box-shadow: 0 0 50px rgba(0, 255, 242, 0.1), inset 0 0 20px rgba(147, 51, 234, 0.1);
 }
 
 .contact-form {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
-    margin-top: 2rem;
+    gap: 2rem;
+    margin-top: 2.5rem;
 }
 
-.form-group input, .form-group textarea {
+/* NOWOCZESNE GRUPY LINKOWANYCH INPUTÓW Z UNOSZONĄ ETYKIETĄ */
+.custom-input-group {
+    position: relative;
     width: 100%;
-    padding: 1rem 1.4rem;
-    background: rgba(5, 5, 15, 0.5);
-    border: 1px solid var(--card-border);
+}
+
+.custom-input-group input, .custom-input-group textarea {
+    width: 100%;
+    padding: 1.2rem 1rem 0.6rem 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: #fff;
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-family: var(--font-body);
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.form-group input:focus, .form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 15px rgba(0, 255, 242, 0.2);
+.custom-input-group textarea {
+    resize: none;
+}
+
+/* Etykieta (placeholder) jako żywy element interfejsu */
+.custom-input-group label {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: left top;
+}
+
+/* Dynamiczny pasek podświetlenia (neon bar) */
+.input-bar {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* EFEKT INTERAKTYWNY: Ruch etykiety w górę i aktywacja neonu */
+.custom-input-group input:focus ~ label,
+.custom-input-group input:not(:placeholder-shown) ~ label,
+.custom-input-group textarea:focus ~ label,
+.custom-input-group textarea:not(:placeholder-shown) ~ label {
+    transform: translateY(-0.8rem) scale(0.78);
+    color: var(--primary);
+}
+
+.custom-input-group input:focus, .custom-input-group textarea:focus {
+    border-color: rgba(0, 255, 242, 0.25);
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.custom-input-group input:focus ~ .input-bar, .custom-input-group textarea:focus ~ .input-bar {
+    width: 100%;
+    left: 0;
+}
+
+/* Pulsacja przycisku Submit */
+.submit-btn-glow {
+    width: 100%;
+    border: none;
+    margin-top: 0.5rem;
+    position: relative;
+}
+
+.submit-btn-glow:active {
+    transform: scale(0.98);
 }
 
 @media (max-width: 768px) {
-    .nav-links {
-        display: none;
-    }
-    .hero {
-        padding-top: 90px;
-        padding-bottom: 40px;
-        text-align: center;
-        min-height: calc(100vh - 60px);
-    }
-    .hero-cta {
-        flex-direction: column;
-        gap: 0.8rem;
-    }
-    .btn {
-        width: 100%;
-    }
+    .nav-links { display: none; }
+    .hero { padding-top: 90px; padding-bottom: 40px; text-align: center; min-height: calc(100vh - 60px); }
+    .hero-cta { flex-direction: column; gap: 0.8rem; }
+    .btn { width: 100%; }
+    .contact-card { padding: 3rem 1.5rem; }
 }
