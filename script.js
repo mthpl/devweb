@@ -12,7 +12,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const particlesGeometry = new THREE.BufferGeometry();
-const count = 1500; // Zwiększona liczba dla efektu WOW
+const count = 1800; // Duża gęstość cząsteczek
 const positions = new Float32Array(count * 3);
 
 for(let i = 0; i < count * 3; i++) {
@@ -21,7 +21,7 @@ for(let i = 0; i < count * 3; i++) {
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
 const particlesMaterial = new THREE.PointsMaterial({
-    size: 0.038,
+    size: 0.04,
     color: 0x00fff2,
     transparent: true,
     opacity: 0.8,
@@ -35,6 +35,7 @@ let mouseX = 0;
 let mouseY = 0;
 let targetX = 0;
 let targetY = 0;
+let speedMultiplier = 1; // Mnożnik prędkości kontrolowany przez scrollowanie
 
 document.addEventListener('mousemove', (event) => {
     mouseX = (event.clientX / window.innerWidth) - 0.5;
@@ -45,7 +46,15 @@ const clock = new THREE.Clock();
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
-    particleSystem.rotation.y = elapsedTime * 0.04;
+    
+    // Podstawowa rotacja + hiper-prędkość wywoływana scrollem
+    particleSystem.rotation.y = elapsedTime * (0.04 * speedMultiplier);
+    // Efekt przybliżania (lecenie w głąb gwiazd przy przejściu)
+    if(speedMultiplier > 1) {
+        particleSystem.position.z = (speedMultiplier - 1) * 2;
+    } else {
+        particleSystem.position.z = 0;
+    }
 
     targetX = mouseX * 2.8;
     targetY = -mouseY * 2.8;
@@ -65,7 +74,7 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- SEKCJA GSAP: INTRO ANIMACJA SEKCJ HERO ---
+// --- SEKCJA GSAP: INTRO ANIMACJA ---
 gsap.from('.hero-content > *', {
     opacity: 0,
     y: 50,
@@ -75,39 +84,36 @@ gsap.from('.hero-content > *', {
 });
 
 
-// --- EFEKTOWNE ROZPROSZENIE / ZNIKANIE TEKSTU PRZY SCROLLOWANIU ---
-gsap.fromTo('.dissolve-text', 
-    { 
-        opacity: 0, 
-        scale: 0.8, 
-        filter: 'blur(15px)' 
-    },
-    {
-        scrollTrigger: {
-            trigger: '#text-trigger',
-            start: 'top 80%',
-            end: 'bottom 20%',
-            scrub: true, // Animacja idzie dokładnie za palcem/skrollem
-            toggleActions: 'play reverse play reverse'
-        },
-        opacity: 1,
-        scale: 1.1,
-        filter: 'blur(0px)',
-        ease: 'none'
-    }
-);
-
-// Druga faza skrollowania — tekst rozprasza się i znika w miarę dalszego ruchu w dół
-gsap.to('.dissolve-text', {
+// --- SPERSONALIZOWANE, ULTRA-DYNAMICZNE PRZEJŚCIE 3D (SKOK W NADPRZESTRZEŃ) ---
+const tl = gsap.timeline({
     scrollTrigger: {
         trigger: '#text-trigger',
-        start: 'top 30%',
-        end: 'bottom top',
-        scrub: true
-    },
+        start: 'top bottom', // Start animacji gdy sekcja wchodzi od dołu
+        end: 'bottom top',   // Koniec gdy opuszcza górę ekranu
+        scrub: true,         // Pełna synchronizacja z ruchem myszki / palca
+    }
+});
+
+// Faza 1: Pojawianie się tekstu i przyspieszanie silnika 3D
+tl.to('.dissolve-text', {
+    opacity: 1,
+    scale: 1,
+    filter: 'blur(0px)',
+    duration: 1
+})
+.to({}, {
+    duration: 1,
+    onUpdate: function() {
+        // Zwiększanie prędkości obrotu i zbliżania gwiazd Three.js
+        let progress = this.progress(); // Pobiera aktualny postęp sekcji od 0 do 1
+        speedMultiplier = 1 + (Math.sin(progress * Math.PI) * 12); // Szczyt prędkości na środku sekcji
+    }
+}, 0) // uruchom w tym samym czasie
+// Faza 2: Rozmycie, powiększenie i zniknięcie tekstu
+.to('.dissolve-text', {
     opacity: 0,
-    scale: 1.4,
-    filter: 'blur(20px)',
-    y: -50,
-    ease: 'none'
+    scale: 1.6,
+    filter: 'blur(25px)',
+    y: -80,
+    duration: 1
 });
