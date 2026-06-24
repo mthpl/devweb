@@ -29,7 +29,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
 }
 
@@ -39,12 +39,12 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -2;
+    z-index: -1;
     background-image: linear-gradient(rgba(0, 255, 242, 0.01) 1px, transparent 1px),
                       linear-gradient(90deg, rgba(0, 255, 242, 0.01) 1px, transparent 1px);
     background-size: 80px 80px;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.7;
 }
 
 .gradient-text {
@@ -53,8 +53,8 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-.font-orbitron {
-    font-family: var(--font-tech);
+.text-glow {
+    text-shadow: 0 0 40px rgba(0, 255, 242, 0.5);
 }
 
 /* Nawigacja */
@@ -63,7 +63,7 @@ body {
     top: 0;
     width: 100%;
     z-index: 100;
-    background: rgba(2, 2, 5, 0.7);
+    background: rgba(2, 2, 5, 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--card-border);
@@ -92,55 +92,59 @@ body {
     margin-left: 2.5rem;
     font-size: 0.95rem;
     font-weight: 600;
+    transition: color 0.3s;
 }
+
+.nav-links a:hover { color: var(--primary); }
 
 .nav-links .nav-btn {
     border: 1px solid var(--primary);
     padding: 0.6rem 1.4rem;
     border-radius: 50px;
     background: rgba(0, 255, 242, 0.03);
+    box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
 }
 
-/* Architektura Sekcji Morphingowych */
-.hero-section {
-    height: 100vh;
-    width: 100vw;
+/* Sekcje Hero */
+.hero {
+    min-height: 100vh;
     display: flex;
     align-items: center;
+    padding: 140px 2rem;
     position: relative;
-    padding: 0 10vw;
-    box-sizing: border-box;
+    z-index: 2;
 }
 
-.content-container {
-    max-width: 850px;
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
     width: 100%;
+}
+
+.morph-target {
+    max-width: 850px;
+    color: #ffffff;
     position: relative;
 }
 
-/* Ukrywamy surowy tekst HTML – Three.js przepisze go na cząsteczki */
-.source-text {
-    visibility: hidden;
-    position: absolute;
+.hero-title {
+    font-family: var(--font-tech);
     font-size: clamp(2.1rem, 5.5vw, 3.8rem);
+    font-weight: 900;
     line-height: 1.15;
-    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    color: #ffffff;
 }
 
-/* Interfejs użytkownika pod nagłówkiem 3D */
-.interactive-ui {
-    margin-top: clamp(6rem, 15vh, 12rem); /* Przestrzeń na wygenerowany nagłówek 3D */
-    will-change: opacity;
-}
-
-.section-desc {
+.hero-subtitle {
     color: var(--text-muted);
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.8;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
+    font-weight: 400;
 }
 
-.section-desc b {
+.hero-subtitle b {
     color: #ffffff;
     font-weight: 600;
 }
@@ -157,12 +161,11 @@ body {
     font-weight: 600;
     text-decoration: none;
     transition: all 0.3s ease;
-    display: inline-block;
 }
 
 .btn-primary {
-    background: linear-gradient(45deg, var(--primary), var(--secondary));
-    color: #000000;
+    background: linear-gradient(45deg, var(--primary), var(--secondary)) !important;
+    color: #000000 !important;
     box-shadow: 0 0 30px rgba(0, 255, 242, 0.3);
 }
 
@@ -182,26 +185,34 @@ body {
     transform: translateY(-4px);
 }
 
-/* Sekcja Kontakt */
+/* Dynamiczny warstwa generująca rozbicie tekstu na cząsteczki */
+.disintegrate-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Kontakt */
 .contact-section {
-    min-height: 100vh;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 140px 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 120px 2rem;
+    position: relative;
+    z-index: 10;
 }
 
 .contact-card {
-    width: 100%;
     max-width: 650px;
+    margin: 0 auto;
     text-align: center;
-    background: rgba(5, 5, 15, 0.6);
-    padding: 4rem 3rem;
-    border-radius: 28px;
-    border: 1px solid var(--card-border);
-    backdrop-filter: blur(20px);
+}
+
+.contact-card h2 {
+    font-family: var(--font-tech);
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
 }
 
 .contact-form {
@@ -214,7 +225,7 @@ body {
 .form-group input, .form-group textarea {
     width: 100%;
     padding: 1.2rem 1.6rem;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(5, 5, 15, 0.5);
     border: 1px solid var(--card-border);
     border-radius: 14px;
     color: #fff;
@@ -228,9 +239,8 @@ body {
     box-shadow: 0 0 20px rgba(0, 255, 242, 0.2);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 968px) {
     .nav-links { display: none; }
-    .hero-section { padding: 0 5vw; text-align: center; }
+    .hero { padding-top: 100px; padding-bottom: 60px; text-align: center; }
     .hero-cta { justify-content: center; }
-    .contact-card { padding: 2.5rem 1.5rem; }
 }
