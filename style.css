@@ -234,24 +234,40 @@ span.char[class*="gradient"] {
     z-index: 2;
 }
 
-/* GSAP will animate from opacity:0/translateY, so set initial state here */
+/* GSAP animates from opacity:0 — initial hidden state set here */
 .contact-card {
     width: 100%;
     max-width: 650px;
     margin: 0 auto;
     text-align: center;
-    background: rgba(4, 4, 12, 0.75);
+    background: rgba(4, 4, 12, 0.82);
     padding: 4rem 3rem;
     border-radius: 28px;
     border: 1px solid var(--card-border);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     position: relative;
     overflow: hidden;
     transition: border-color 0.4s, box-shadow 0.4s;
-    /* initial hidden state — GSAP will reveal it */
     opacity: 0;
-    transform: translateY(60px) scale(0.94);
+    transform: translateY(80px) scale(0.9);
+    transform-style: preserve-3d;
+}
+
+/* Orb canvas sits behind all card content */
+#orb-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 28px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* All direct children of card above orb canvas */
+.contact-card > *:not(#orb-canvas):not(.card-glow-line) {
+    position: relative;
+    z-index: 2;
 }
 
 .card-glow-line {
