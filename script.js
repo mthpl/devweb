@@ -67,15 +67,13 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. GŁĘBOKI PARSER TEKSTU (ROZBIJA RÓWNIEŻ LITERY WEWNĄTRZ SPANÓW I GRADIENTÓW) ---
+// --- 2. DEEP PARSER TEKSTU (ZAPEWNIA BEZBŁĘDNE OWIJANIE LITER W SPANACH) ---
 document.querySelectorAll('.fx-shatter').forEach(title => {
     const processNodes = (node) => {
         const fragment = document.createDocumentFragment();
         
-        // Przeglądamy wszystkie elementy wewnątrz nagłówka (w tym zagnieżdżone tagi span)
         Array.from(node.childNodes).forEach(child => {
             if (child.nodeType === Node.TEXT_NODE) {
-                // Jeśli trafimy na czysty tekst, rozbijamy go na litery
                 child.textContent.split('').forEach(char => {
                     if (char === ' ') {
                         fragment.appendChild(document.createTextNode(' '));
@@ -87,7 +85,6 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
                     }
                 });
             } else if (child.nodeType === Node.ELEMENT_NODE) {
-                // Jeśli to element (np. <span class="gradient-text">), wchodzimy do środka rekurencyjnie
                 const clonedElement = child.cloneNode(false);
                 clonedElement.appendChild(processNodes(child));
                 fragment.appendChild(clonedElement);
@@ -102,7 +99,7 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
 });
 
 
-// --- 3. SPÓJNY SYSTEM SCALANIA TEKSTU DLA WSZYSTKICH SEKCOJI ---
+// --- 3. SPÓJNY SYSTEM SCALANIA TEKSTU DLA WSZYSTKICH SEKCOJI (WYMUSZENIE OSTROŚCI) ---
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section, index) => {
@@ -110,8 +107,10 @@ particleSections.forEach((section, index) => {
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    // Wymuszenie czystego stanu początkowego bez blura na dzień dobry
+    // WYMUSZENIE CAŁKOWITEGO BRAKU BLURA I OPACITY=1 PRZED ANIMACJĄ (NAPRAWA BŁĘDU CHROMIUM)
     gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, filter: 'blur(0px)' });
+    if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0, filter: 'blur(0px)' });
+    if(cta) gsap.set(cta, { opacity: 1, y: 0, filter: 'blur(0px)' });
 
     const masterTimeline = gsap.timeline({
         scrollTrigger: {
@@ -124,7 +123,7 @@ particleSections.forEach((section, index) => {
         }
     });
 
-    // ETAP ENTRANCE (WEJŚCIE): Każda litera (również z gradientu) nadlatuje chaotycznie z kosmosu i się scala
+    // ETAP ENTRANCE (WEJŚCIE): Każda pojedyncza litera, niezależnie od gradientu, płynnie nadlatuje
     if (index > 0) {
         chars.forEach((char) => {
             const startX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
@@ -139,7 +138,7 @@ particleSections.forEach((section, index) => {
                 rotationX: startRot,
                 rotationY: startRot,
                 opacity: 0,
-                filter: 'blur(10px)',
+                filter: 'blur(10px)', // Blur nakłada się wyłącznie w locie w JS
                 duration: 1
             }, 0);
         });
@@ -148,7 +147,7 @@ particleSections.forEach((section, index) => {
         if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, filter: 'blur(8px)', duration: 0.6 }, 0.4);
     }
 
-    // Moment zatrzymania – napisy idealnie ułożone i krystalicznie ostre
+    // Pełne zatrzymanie i wyczyszczenie jakichkolwiek artefaktów rozmycia na środku sekcji
     masterTimeline.to({}, { duration: 0.4 });
 });
 
