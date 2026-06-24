@@ -67,11 +67,12 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. GŁĘBOKI PARSER TEKSTU (IDEALNA OSTROŚĆ LITER) ---
+// --- 2. CAŁKOWICIE NOWY, PŁASKI PARSER TEKSTU (PROSTUJE STRUKTURĘ DLA IDEALNEJ OSTROŚCI) ---
 document.querySelectorAll('.fx-shatter').forEach(title => {
-    const processNodes = (node) => {
-        const fragment = document.createDocumentFragment();
-        
+    const fragment = document.createDocumentFragment();
+
+    // Funkcja wyciągająca tekst i przepisująca klasy bezpośrednio na litery
+    const extractChars = (node, inheritedClasses = '') => {
         Array.from(node.childNodes).forEach(child => {
             if (child.nodeType === Node.TEXT_NODE) {
                 child.textContent.split('').forEach(char => {
@@ -79,27 +80,26 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
                         fragment.appendChild(document.createTextNode(' '));
                     } else {
                         const span = document.createElement('span');
-                        span.classList.add('char');
+                        span.className = `char ${inheritedClasses}`.trim(); // Przypisanie gradient-text bezpośrednio do litery
                         span.textContent = char;
                         fragment.appendChild(span);
                     }
                 });
             } else if (child.nodeType === Node.ELEMENT_NODE) {
-                const clonedElement = child.cloneNode(false);
-                clonedElement.appendChild(processNodes(child));
-                fragment.appendChild(clonedElement);
+                // Pobieramy klasy ze spana (np. "gradient-text text-glow") i przekazujemy je głębiej do liter
+                const currentClasses = child.className;
+                extractChars(child, currentClasses);
             }
         });
-        return fragment;
     };
 
-    const container = document.createElement('div');
-    container.appendChild(processNodes(title));
-    title.innerHTML = container.innerHTML;
+    extractChars(title);
+    title.innerHTML = ''; // Czyszczenie starej, wadliwej struktury HTML
+    title.appendChild(fragment); // Wstrzyknięcie płaskiej, bezpiecznej listy wektorowych liter
 });
 
 
-// --- 3. SPÓJNY SYSTEM SCALANIA TEKSTU BEZ BLURA (ZABEZPIECZENIE GRADIENTÓW) ---
+// --- 3. SPÓJNY SYSTEM SCALANIA TEKSTU (BEZ ŻADNEGO FILTRU BLUR) ---
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section, index) => {
@@ -107,7 +107,7 @@ particleSections.forEach((section, index) => {
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    // USUNIĘTO JAKIKOLWIEK BLUR Z PARAMETRÓW STARTOWYCH I ANIMACJI
+    // Całkowity reset – wymuszenie krystalicznej ostrości od 1 milisekundy
     gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
     if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
     if(cta) gsap.set(cta, { opacity: 1, y: 0 });
@@ -123,7 +123,7 @@ particleSections.forEach((section, index) => {
         }
     });
 
-    // ETAP ENTRANCE (WEJŚCIE): Skalowanie i wyłanianie z przezroczystości zamiast niszczącego blura
+    // ETAP ENTRANCE (WEJŚCIE): Płynne skalowanie i dolot z przestrzeni kosmicznej
     if (index > 0) {
         chars.forEach((char) => {
             const startX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
@@ -137,7 +137,7 @@ particleSections.forEach((section, index) => {
                 z: startZ,
                 rotationX: startRot,
                 rotationY: startRot,
-                scale: 0, // Litery rosną z nicości składając się w wyraz
+                scale: 0, 
                 opacity: 0,
                 duration: 1
             }, 0);
@@ -151,18 +151,16 @@ particleSections.forEach((section, index) => {
 });
 
 
-// --- 4. ZAAWANSOWANE EFEKTY INTERAKTYWNE DLA FORMULARZA ---
+// --- 4. EFEKTY INTERAKTYWNE DLA FORMULARZA ---
 const formCard = document.querySelector('.contact-card');
 const formInputs = document.querySelectorAll('.custom-input-group input, .custom-input-group textarea');
 
 formInputs.forEach(input => {
-    // Podświetlenie całej karty neonem, gdy użytkownik wejdzie w interakcję z polami
     input.addEventListener('focus', () => {
         formCard.classList.add('form-active');
     });
     
     input.addEventListener('blur', () => {
-        // Zdejmij podświetlenie tylko jeśli wszystkie pola są puste i nieaktywne
         const anyActive = Array.from(formInputs).some(inp => inp === document.activeElement);
         if(!anyActive) {
             formCard.classList.remove('form-active');
