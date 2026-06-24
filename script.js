@@ -67,11 +67,10 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 2. CAŁKOWICIE NOWY, PŁASKI PARSER TEKSTU (PROSTUJE STRUKTURĘ DLA IDEALNEJ OSTROŚCI) ---
+// --- 2. ZMODYFIKOWANY PARSER TEKSTU (SZANUJE I PRZENOSI TAGI <BR> DLA IDEALNEGO UKŁADU) ---
 document.querySelectorAll('.fx-shatter').forEach(title => {
     const fragment = document.createDocumentFragment();
 
-    // Funkcja wyciągająca tekst i przepisująca klasy bezpośrednio na litery
     const extractChars = (node, inheritedClasses = '') => {
         Array.from(node.childNodes).forEach(child => {
             if (child.nodeType === Node.TEXT_NODE) {
@@ -80,26 +79,30 @@ document.querySelectorAll('.fx-shatter').forEach(title => {
                         fragment.appendChild(document.createTextNode(' '));
                     } else {
                         const span = document.createElement('span');
-                        span.className = `char ${inheritedClasses}`.trim(); // Przypisanie gradient-text bezpośrednio do litery
+                        span.className = `char ${inheritedClasses}`.trim(); 
                         span.textContent = char;
                         fragment.appendChild(span);
                     }
                 });
             } else if (child.nodeType === Node.ELEMENT_NODE) {
-                // Pobieramy klasy ze spana (np. "gradient-text text-glow") i przekazujemy je głębiej do liter
-                const currentClasses = child.className;
-                extractChars(child, currentClasses);
+                // JEŚLI TRAFIMY NA <BR>, PRZENOSIMY GO BEZPOŚREDNIO DO STRUKTURY ZNAKÓW
+                if (child.tagName.toLowerCase() === 'br') {
+                    fragment.appendChild(document.createElement('br'));
+                } else {
+                    const currentClasses = child.className;
+                    extractChars(child, currentClasses);
+                }
             }
         });
     };
 
     extractChars(title);
-    title.innerHTML = ''; // Czyszczenie starej, wadliwej struktury HTML
-    title.appendChild(fragment); // Wstrzyknięcie płaskiej, bezpiecznej listy wektorowych liter
+    title.innerHTML = ''; 
+    title.appendChild(fragment); 
 });
 
 
-// --- 3. SPÓJNY SYSTEM SCALANIA TEKSTU (BEZ ŻADNEGO FILTRU BLUR) ---
+// --- 3. SPÓJNY SYSTEM SCALANIA I WYJŚCIA TEKSTU DLA WSZYSTKICH SEKCOJI ---
 const particleSections = document.querySelectorAll('.particle-section');
 
 particleSections.forEach((section, index) => {
@@ -107,7 +110,7 @@ particleSections.forEach((section, index) => {
     const subtitle = section.querySelector('.hero-subtitle');
     const cta = section.querySelector('.hero-cta');
 
-    // Całkowity reset – wymuszenie krystalicznej ostrości od 1 milisekundy
+    // Reset – wymuszenie pełnej ostrości dla całego nagłówka od startu
     gsap.set(chars, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, scale: 1 });
     if(subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
     if(cta) gsap.set(cta, { opacity: 1, y: 0 });
@@ -123,35 +126,58 @@ particleSections.forEach((section, index) => {
         }
     });
 
-    // ETAP ENTRANCE (WEJŚCIE): Płynne skalowanie i dolot z przestrzeni kosmicznej
-    if (index > 0) {
-        chars.forEach((char) => {
-            const startX = isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7;
-            const startY = isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7;
-            const startZ = isMobile ? 0 : (Math.random() - 0.5) * 500;
-            const startRot = isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180;
+    // GENEROWANIE POZYCJI WYBUCHU ZNAKÓW
+    const animData = Array.from(chars).map(() => ({
+        x: isMobile ? (Math.random() - 0.5) * 60 : (Math.random() - 0.5) * window.innerWidth * 0.7,
+        y: isMobile ? (Math.random() - 0.5) * 40 : (Math.random() - 0.6) * window.innerHeight * 0.7,
+        z: isMobile ? 0 : (Math.random() - 0.5) * 500,
+        rot: isMobile ? (Math.random() - 0.5) * 45 : (Math.random() - 0.5) * 180
+    }));
 
+    // ETAP ENTRANCE (WEJŚCIE): Jeśli to nie pierwsza sekcja, litery wlatują z kosmosu
+    if (index > 0) {
+        chars.forEach((char, i) => {
             masterTimeline.from(char, {
-                x: startX,
-                y: startY,
-                z: startZ,
-                rotationX: startRot,
-                rotationY: startRot,
-                scale: 0, 
+                x: animData[i].x,
+                y: animData[i].y,
+                z: animData[i].z,
+                rotationX: animData[i].rot,
+                rotationY: animData[i].rot,
+                scale: 0,
                 opacity: 0,
-                duration: 1
+                duration: 0.5
             }, 0);
         });
 
-        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, duration: 0.8 }, 0.2);
-        if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, duration: 0.6 }, 0.4);
+        if(subtitle) masterTimeline.from(subtitle, { opacity: 0, y: 30, duration: 0.4 }, 0.1);
+        if(cta) masterTimeline.from(cta, { opacity: 0, y: 30, duration: 0.3 }, 0.2);
     }
 
+    // Punkt kulminacyjny sekcji (tekst idealnie ułożony, ostry)
     masterTimeline.to({}, { duration: 0.4 });
+
+    // ETAP EXIT (WYJŚCIE): DODANO ROZPAD DLA PIERWSZEJ I DRUGIEJ SEKCJI PRZY SCROLLU W DÓŁ
+    if (index < particleSections.length - 1) {
+        chars.forEach((char, i) => {
+            masterTimeline.to(char, {
+                x: animData[i].x,
+                y: animData[i].y,
+                z: animData[i].z,
+                rotationX: animData[i].rot,
+                rotationY: animData[i].rot,
+                scale: 0,
+                opacity: 0,
+                duration: 0.5
+            }, '+=0');
+        });
+
+        if(subtitle) masterTimeline.to(subtitle, { opacity: 0, y: -40, duration: 0.4 }, '-=0.5');
+        if(cta) masterTimeline.to(cta, { opacity: 0, y: -20, duration: 0.3 }, '-=0.5');
+    }
 });
 
 
-// --- 4. EFEKTY INTERAKTYWNE DLA FORMULARZA ---
+// --- 4. INTERAKTYWNE WYDARZENIA FORMULARZA ---
 const formCard = document.querySelector('.contact-card');
 const formInputs = document.querySelectorAll('.custom-input-group input, .custom-input-group textarea');
 
