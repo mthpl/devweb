@@ -51,6 +51,7 @@ body {
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: inline-block;
 }
 
 .text-glow {
@@ -92,20 +93,16 @@ body {
     margin-left: 2.5rem;
     font-size: 0.95rem;
     font-weight: 600;
-    transition: color 0.3s;
 }
-
-.nav-links a:hover { color: var(--primary); }
 
 .nav-links .nav-btn {
     border: 1px solid var(--primary);
     padding: 0.6rem 1.4rem;
     border-radius: 50px;
     background: rgba(0, 255, 242, 0.03);
-    box-shadow: 0 0 15px rgba(0, 255, 242, 0.1);
 }
 
-/* Sekcje Hero */
+/* Sekcje */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -123,8 +120,6 @@ body {
 
 .morph-target {
     max-width: 850px;
-    color: #ffffff;
-    position: relative;
 }
 
 .hero-title {
@@ -134,6 +129,12 @@ body {
     line-height: 1.15;
     margin-bottom: 2.5rem;
     color: #ffffff;
+}
+
+/* Przygotowanie liter nagłówka do fizycznego rozpadu */
+.fx-shatter .char {
+    display: inline-block;
+    will-change: transform, opacity, filter;
 }
 
 .hero-subtitle {
@@ -185,15 +186,6 @@ body {
     transform: translateY(-4px);
 }
 
-/* Dynamiczny warstwa generująca rozbicie tekstu na cząsteczki */
-.disintegrate-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 10;
-}
-
 /* Kontakt */
 .contact-section {
     max-width: 1200px;
@@ -207,12 +199,11 @@ body {
     max-width: 650px;
     margin: 0 auto;
     text-align: center;
-}
-
-.contact-card h2 {
-    font-family: var(--font-tech);
-    font-size: 2.2rem;
-    margin-bottom: 1.2rem;
+    background: rgba(5, 5, 15, 0.6);
+    padding: 4rem 3rem;
+    border-radius: 28px;
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px);
 }
 
 .contact-form {
